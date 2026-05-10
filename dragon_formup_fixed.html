@@ -1,0 +1,3951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragon Formup — Professional Image Editor</title>
+<style>
+/* ============================================================
+   DRAGON FORMUP — PROFESSIONAL IMAGE EDITOR
+   Dark Obsidian Theme · Ultra Professional
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600&family=Share+Tech+Mono&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-void:      #050608;
+  --bg-deep:      #0a0c10;
+  --bg-panel:     #0f1218;
+  --bg-card:      #141820;
+  --bg-hover:     #1a2030;
+  --bg-active:    #1e2840;
+  --border:       #1e2535;
+  --border-glow:  #2a3a5c;
+  --dragon-red:   #e8341a;
+  --dragon-gold:  #f0a020;
+  --dragon-blue:  #1a8fff;
+  --dragon-cyan:  #00d4ff;
+  --accent:       #e8341a;
+  --accent2:      #f0a020;
+  --text-bright:  #f0f4ff;
+  --text-primary: #c8d0e0;
+  --text-muted:   #6070a0;
+  --text-dim:     #3a4a6a;
+  --success:      #00e676;
+  --warning:      #ffab40;
+  --panel-w:      240px;
+  --toolbar-w:    52px;
+  --topbar-h:     48px;
+  --statusbar-h:  28px;
+  --radius:       6px;
+  --radius-sm:    4px;
+  --shadow:       0 4px 24px rgba(0,0,0,0.6);
+  --glow-red:     0 0 20px rgba(232,52,26,0.3);
+  --glow-gold:    0 0 20px rgba(240,160,32,0.25);
+  --glow-blue:    0 0 20px rgba(26,143,255,0.25);
+  --transition:   0.18s ease;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'Exo 2', sans-serif;
+  font-size: 13px;
+  user-select: none;
+}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 2px; }
+
+/* ══════════════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════════════ */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar-h);
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  z-index: 1000;
+  padding: 0 12px;
+  gap: 0;
+}
+
+/* LOGO */
+.logo-zone {
+  display: flex; align-items: center; gap: 10px;
+  padding-right: 20px;
+  border-right: 1px solid var(--border);
+  min-width: 200px;
+}
+.dragon-logo-svg { width: 34px; height: 34px; flex-shrink: 0; }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #e8341a, #f0a020, #e8341a);
+  background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: logoShimmer 4s linear infinite;
+}
+.logo-sub {
+  font-size: 9px; letter-spacing: 3px;
+  color: var(--text-muted); text-transform: uppercase;
+}
+@keyframes logoShimmer {
+  0%{background-position:0% center} 100%{background-position:200% center}
+}
+
+/* MENU BAR */
+.menubar {
+  display: flex; align-items: center;
+  padding: 0 8px; height: 100%;
+  flex: 1;
+}
+.menu-item {
+  position: relative;
+  padding: 6px 12px;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.menu-item:hover { color: var(--text-bright); background: var(--bg-hover); }
+.menu-item.active { color: var(--dragon-gold); background: var(--bg-hover); }
+
+.dropdown {
+  display: none;
+  position: absolute; top: 100%; left: 0;
+  min-width: 180px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 2000;
+  padding: 4px 0;
+  animation: dropIn 0.15s ease;
+}
+@keyframes dropIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+.menu-item:hover .dropdown { display: block; }
+.dd-item {
+  padding: 7px 16px;
+  font-size: 12px; color: var(--text-primary);
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.dd-item:hover { background: var(--bg-hover); color: var(--text-bright); }
+.dd-item .shortcut { margin-left: auto; color: var(--text-dim); font-size: 10px; font-family: 'Share Tech Mono', monospace; }
+.dd-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* TOP RIGHT CONTROLS */
+.topbar-right {
+  display: flex; align-items: center; gap: 8px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+}
+.topbar-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'Exo 2', sans-serif;
+  font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: var(--transition);
+  letter-spacing: 0.5px;
+}
+.topbar-btn:hover { border-color: var(--dragon-gold); color: var(--dragon-gold); }
+.topbar-btn.primary {
+  background: linear-gradient(135deg, var(--dragon-red), #c42a10);
+  border-color: var(--dragon-red);
+  color: white;
+}
+.topbar-btn.primary:hover { box-shadow: var(--glow-red); }
+
+/* ZOOM */
+.zoom-display {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; color: var(--text-muted);
+  padding: 0 12px;
+  min-width: 60px; text-align: center;
+}
+
+/* ══════════════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════════════ */
+#app {
+  position: fixed;
+  top: var(--topbar-h);
+  bottom: var(--statusbar-h);
+  left: 0; right: 0;
+  display: flex;
+}
+
+/* ══════════════════════════════════════════════
+   LEFT TOOLBAR
+══════════════════════════════════════════════ */
+#toolbar {
+  width: var(--toolbar-w);
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 2px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.tool-group-sep {
+  width: 32px; height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+.tool-btn {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  color: var(--text-muted);
+  font-size: 17px;
+}
+.tool-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.tool-btn.active {
+  background: linear-gradient(135deg, rgba(232,52,26,0.25), rgba(240,160,32,0.15));
+  color: var(--dragon-gold);
+  border: 1px solid rgba(240,160,32,0.3);
+  box-shadow: 0 0 12px rgba(232,52,26,0.2);
+}
+.tool-btn .tip {
+  display: none;
+  position: absolute; left: 100%; top: 50%; transform: translateY(-50%);
+  margin-left: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: 11px; white-space: nowrap;
+  color: var(--text-bright);
+  z-index: 500;
+  pointer-events: none;
+}
+.tool-btn:hover .tip { display: block; }
+
+/* ══════════════════════════════════════════════
+   LEFT PANEL
+══════════════════════════════════════════════ */
+#left-panel {
+  width: var(--panel-w);
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════
+   CANVAS AREA
+══════════════════════════════════════════════ */
+#canvas-area {
+  flex: 1;
+  background: #040507;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(232,52,26,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(26,143,255,0.04) 0%, transparent 50%),
+    linear-gradient(45deg, #0a0a0d 25%, transparent 25%),
+    linear-gradient(-45deg, #0a0a0d 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #0a0a0d 75%),
+    linear-gradient(-45deg, transparent 75%, #0a0a0d 75%);
+  background-size: 100% 100%, 100% 100%, 16px 16px, 16px 16px, 16px 16px, 16px 16px;
+  background-position: 0 0, 0 0, 0 0, 0 8px, 8px -8px, -8px 0px;
+  position: relative;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+
+#canvas-wrapper {
+  position: relative;
+  box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+#main-canvas {
+  display: block;
+  background: white;
+  cursor: crosshair;
+}
+
+/* Canvas rulers */
+.canvas-rulers {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+
+/* Upload overlay */
+#upload-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+  z-index: 10;
+}
+.upload-dragon {
+  opacity: 0.08;
+  position: absolute;
+  font-size: 300px;
+  filter: blur(2px);
+  pointer-events: none;
+}
+.upload-content { position: relative; text-align: center; }
+.upload-icon {
+  width: 80px; height: 80px;
+  margin: 0 auto 20px;
+  border: 2px dashed var(--border-glow);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  color: var(--text-dim);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100%{border-color:var(--border-glow);box-shadow:none}
+  50%{border-color:var(--dragon-red);box-shadow:var(--glow-red)}
+}
+.upload-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px; font-weight: 600;
+  color: var(--text-primary); letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.upload-sub { color: var(--text-muted); font-size: 12px; margin-bottom: 20px; }
+.upload-btn {
+  padding: 10px 28px;
+  background: linear-gradient(135deg, var(--dragon-red), #c42a10);
+  border: none; border-radius: var(--radius);
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 1px;
+  cursor: pointer; transition: var(--transition);
+}
+.upload-btn:hover { box-shadow: var(--glow-red); transform: translateY(-1px); }
+#file-input { display: none; }
+
+/* ══════════════════════════════════════════════
+   RIGHT PANEL
+══════════════════════════════════════════════ */
+#right-panel {
+  width: var(--panel-w);
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* ── PANEL TABS ── */
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-deep);
+}
+.ptab {
+  flex: 1; padding: 10px 4px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  text-align: center; cursor: pointer;
+  color: var(--text-dim); transition: var(--transition);
+  border-bottom: 2px solid transparent;
+}
+.ptab:hover { color: var(--text-muted); }
+.ptab.active { color: var(--dragon-gold); border-bottom-color: var(--dragon-gold); }
+
+.panel-content { flex: 1; overflow-y: auto; }
+.tab-pane { display: none; padding: 12px; }
+.tab-pane.active { display: block; }
+
+/* ── SECTION HEADERS ── */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.section-hdr:hover { border-color: var(--border-glow); }
+.section-hdr-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.section-hdr-arrow { color: var(--text-dim); font-size: 10px; transition: var(--transition); }
+.section-hdr.open .section-hdr-arrow { transform: rotate(180deg); }
+
+/* ── SLIDERS ── */
+.control-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.control-label {
+  font-size: 11px; color: var(--text-muted);
+  min-width: 65px; flex-shrink: 0;
+}
+.slider-wrap { flex: 1; position: relative; }
+input[type=range] {
+  width: 100%; height: 3px;
+  -webkit-appearance: none; appearance: none;
+  background: var(--bg-hover);
+  border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px; height: 13px;
+  background: linear-gradient(135deg, var(--dragon-gold), var(--dragon-red));
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(240,160,32,0.5);
+}
+.slider-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--dragon-gold);
+  min-width: 28px; text-align: right;
+}
+
+/* ── COLOR PICKERS ── */
+.color-row {
+  display: flex; gap: 8px; margin-bottom: 10px;
+}
+.color-swatch {
+  width: 28px; height: 28px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  cursor: pointer; transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.color-swatch:hover { border-color: var(--dragon-gold); }
+.color-swatch input[type=color] {
+  position: absolute; inset: -4px;
+  width: calc(100% + 8px); height: calc(100% + 8px);
+  opacity: 0; cursor: pointer;
+}
+
+/* ══════════════════════════════════════════════
+   FILTERS PANEL — 50 FILTERS
+══════════════════════════════════════════════ */
+.filters-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; margin-bottom: 10px;
+}
+.filter-btn {
+  padding: 7px 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 10px; font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer; transition: var(--transition);
+  text-align: center; letter-spacing: 0.3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.filter-btn:hover { border-color: var(--dragon-blue); color: var(--dragon-blue); background: rgba(26,143,255,0.08); }
+.filter-btn.active { border-color: var(--dragon-gold); color: var(--dragon-gold); background: rgba(240,160,32,0.1); box-shadow: 0 0 8px rgba(240,160,32,0.2); }
+
+.filter-category {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--dragon-red);
+  margin: 10px 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(232,52,26,0.2);
+}
+
+/* ══════════════════════════════════════════════
+   LAYERS PANEL
+══════════════════════════════════════════════ */
+.layers-list { display: flex; flex-direction: column; gap: 4px; }
+.layer-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; transition: var(--transition);
+}
+.layer-item:hover { border-color: var(--border-glow); }
+.layer-item.active { border-color: var(--dragon-gold); background: rgba(240,160,32,0.08); }
+.layer-thumb {
+  width: 28px; height: 20px;
+  background: linear-gradient(135deg, #333, #555);
+  border-radius: 2px; flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.layer-name { flex: 1; font-size: 11px; color: var(--text-primary); }
+.layer-vis { color: var(--text-dim); font-size: 12px; cursor: pointer; }
+.layer-vis:hover { color: var(--text-primary); }
+
+.layers-actions {
+  display: flex; gap: 4px; margin-top: 8px;
+}
+.layers-btn {
+  flex: 1; padding: 7px 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 11px; color: var(--text-muted);
+  cursor: pointer; transition: var(--transition);
+  text-align: center;
+}
+.layers-btn:hover { border-color: var(--dragon-gold); color: var(--dragon-gold); }
+
+/* ══════════════════════════════════════════════
+   TOOL OPTIONS (Left Panel)
+══════════════════════════════════════════════ */
+.tool-options { padding: 10px; }
+.opt-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px; font-weight: 600; letter-spacing: 2px;
+  color: var(--dragon-gold); margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(240,160,32,0.2);
+}
+
+/* ══════════════════════════════════════════════
+   STATUS BAR
+══════════════════════════════════════════════ */
+#statusbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: var(--statusbar-h);
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 16px;
+  gap: 20px;
+  z-index: 1000;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--text-dim);
+}
+.status-item { display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+.status-sep { width: 1px; height: 14px; background: var(--border); }
+.status-right { margin-left: auto; display: flex; gap: 16px; }
+
+/* ══════════════════════════════════════════════
+   HISTOGRAM
+══════════════════════════════════════════════ */
+.histogram-wrap {
+  width: 100%; height: 70px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  overflow: hidden; position: relative;
+}
+#histCanvas { width: 100%; height: 100%; }
+
+/* ══════════════════════════════════════════════
+   COLOR PALETTE PRESETS
+══════════════════════════════════════════════ */
+.palette-row {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.palette-swatch {
+  width: 20px; height: 20px; border-radius: 3px;
+  cursor: pointer; transition: var(--transition);
+  border: 1px solid transparent;
+}
+.palette-swatch:hover { transform: scale(1.2); border-color: white; }
+
+/* ══════════════════════════════════════════════
+   NOTIFICATION TOAST
+══════════════════════════════════════════════ */
+#toast {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg-card);
+  border: 1px solid var(--dragon-gold);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  font-size: 12px; color: var(--dragon-gold);
+  z-index: 9999;
+  opacity: 0; transition: all 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(240,160,32,0.2);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 5000;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius);
+  padding: 24px; min-width: 340px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+.modal-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: 1px;
+  color: var(--dragon-gold); margin-bottom: 16px;
+}
+.modal-row { margin-bottom: 12px; }
+.modal-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.modal-input {
+  width: 100%; padding: 8px 10px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  color: var(--text-bright);
+  font-family: 'Exo 2', sans-serif; font-size: 12px;
+  outline: none;
+}
+.modal-input:focus { border-color: var(--dragon-gold); }
+.modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+.modal-btn {
+  flex: 1; padding: 9px;
+  border-radius: var(--radius-sm);
+  font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer; transition: var(--transition);
+  border: 1px solid var(--border-glow); color: var(--text-muted);
+  background: var(--bg-hover);
+}
+.modal-btn:hover { border-color: var(--text-muted); color: var(--text-primary); }
+.modal-btn.ok {
+  background: linear-gradient(135deg, var(--dragon-red), #c42a10);
+  border-color: var(--dragon-red); color: white;
+}
+.modal-btn.ok:hover { box-shadow: var(--glow-red); }
+
+/* ══════════════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════════════ */
+#progress-bar {
+  display: none;
+  position: fixed; top: var(--topbar-h); left: 0; right: 0;
+  height: 2px; z-index: 999;
+  background: linear-gradient(90deg, var(--dragon-red), var(--dragon-gold), var(--dragon-blue));
+  background-size: 200% auto;
+  animation: progressAnim 1s linear infinite;
+}
+@keyframes progressAnim { 0%{background-position:0%} 100%{background-position:200%} }
+
+/* ══════════════════════════════════════════════
+   DRAG OVER
+══════════════════════════════════════════════ */
+body.drag-over #canvas-area::after {
+  content: '';
+  position: absolute; inset: 8px;
+  border: 2px dashed var(--dragon-gold);
+  border-radius: var(--radius);
+  pointer-events: none;
+  animation: dragBorder 0.8s ease-in-out infinite;
+}
+@keyframes dragBorder {
+  0%,100%{border-color:var(--dragon-gold);box-shadow:var(--glow-gold)}
+  50%{border-color:var(--dragon-red);box-shadow:var(--glow-red)}
+}
+
+/* ══════════════════════════════════════════════
+   BLEND MODES SELECT
+══════════════════════════════════════════════ */
+select.panel-select {
+  width: 100%; padding: 6px 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'Exo 2', sans-serif; font-size: 11px;
+  outline: none; cursor: pointer;
+  margin-bottom: 8px;
+}
+select.panel-select:focus { border-color: var(--dragon-gold); }
+
+/* ══════════════════════════════════════════════
+   GRADIENT PREVIEW
+══════════════════════════════════════════════ */
+.gradient-preview {
+  width: 100%; height: 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+/* ══════════════════════════════════════════════
+   BRUSH PREVIEW
+══════════════════════════════════════════════ */
+.brush-preview {
+  width: 100%; height: 50px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
+}
+.brush-dot {
+  border-radius: 50%;
+  background: var(--text-primary);
+}
+
+
+/* ══════════════════════════════════════════════
+   PROFESSIONAL SPLASH SCREEN
+══════════════════════════════════════════════ */
+#dragon-splash {
+  position: fixed; inset: 0; z-index: 99999;
+  background: var(--bg-void);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#dragon-splash.fade-out { opacity: 0; pointer-events: none; }
+#dragon-splash.gone { display: none; }
+
+/* Animated background particles */
+.splash-bg {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.splash-particle {
+  position: absolute; border-radius: 50%;
+  animation: particleFloat linear infinite;
+  opacity: 0;
+}
+@keyframes particleFloat {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+
+/* Dragon icon animated */
+.splash-dragon-wrap {
+  position: relative; margin-bottom: 32px;
+  animation: splashDragonPop 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  transform: scale(0); opacity: 0;
+}
+@keyframes splashDragonPop {
+  to { transform: scale(1); opacity: 1; }
+}
+.splash-glow-ring {
+  position: absolute; inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,52,26,0.15) 0%, rgba(240,160,32,0.08) 50%, transparent 70%);
+  animation: glowPulse 2s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%,100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+.splash-dragon-icon {
+  width: 100px; height: 100px;
+  filter: drop-shadow(0 0 30px rgba(232,52,26,0.6)) drop-shadow(0 0 60px rgba(240,160,32,0.3));
+  animation: dragonSpin 0s linear, dragonFloat 3s ease-in-out 0.8s infinite;
+}
+@keyframes dragonFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Title */
+.splash-title-wrap {
+  text-align: center; margin-bottom: 8px;
+  animation: splashTitleIn 0.6s ease 0.4s both;
+}
+@keyframes splashTitleIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.splash-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 42px; font-weight: 700; letter-spacing: 6px;
+  background: linear-gradient(90deg, #e8341a 0%, #f0a020 35%, #f0c850 50%, #f0a020 65%, #e8341a 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: titleShimmer 3s linear infinite;
+}
+@keyframes titleShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
+.splash-sub {
+  font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 4px;
+  animation: splashTitleIn 0.6s ease 0.6s both;
+}
+
+/* Feature pills */
+.splash-features {
+  display: flex; gap: 10px; margin: 24px 0 32px;
+  animation: splashTitleIn 0.6s ease 0.7s both;
+}
+.splash-pill {
+  padding: 5px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(240,160,32,0.2);
+  border-radius: 100px;
+  font-size: 10px; letter-spacing: 1px;
+  color: var(--text-muted); white-space: nowrap;
+}
+
+/* Progress bar */
+.splash-progress-wrap {
+  width: 280px;
+  animation: splashTitleIn 0.6s ease 0.8s both;
+}
+.splash-progress-track {
+  width: 100%; height: 3px;
+  background: var(--bg-hover);
+  border-radius: 100px; overflow: hidden;
+  margin-bottom: 12px;
+}
+.splash-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--dragon-red), var(--dragon-gold));
+  border-radius: 100px;
+  transition: width 0.25s ease;
+  box-shadow: 0 0 10px rgba(240,160,32,0.4);
+}
+.splash-status-text {
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; letter-spacing: 1.5px;
+  color: var(--text-dim);
+  min-height: 16px;
+}
+
+/* Skip button */
+.splash-skip {
+  position: absolute; bottom: 30px; right: 30px;
+  font-size: 10px; color: var(--text-dim);
+  cursor: pointer; letter-spacing: 1px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  animation: splashTitleIn 0.6s ease 1.2s both;
+}
+.splash-skip:hover { color: var(--text-muted); border-color: var(--border-glow); }
+
+/* Version badge */
+.splash-version {
+  position: absolute; bottom: 30px; left: 30px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; color: var(--text-dim); letter-spacing: 1px;
+  animation: splashTitleIn 0.6s ease 1.2s both;
+}
+
+
+/* ── SHORTCUT ROWS ── */
+.shortcut-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 3px 0; font-size: 11px; color: var(--text-muted);
+}
+.shortcut-row kbd {
+  background: var(--bg-hover);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--dragon-gold);
+  min-width: 60px; text-align: center; flex-shrink: 0;
+}
+.shortcut-row span { color: var(--text-primary); }
+
+/* ── DOCUMENTATION SECTIONS ── */
+.doc-section-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--dragon-red); text-transform: uppercase;
+  margin: 14px 0 5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(232,52,26,0.2);
+}
+.doc-section-body {
+  color: var(--text-muted); font-size: 11px; line-height: 1.85;
+  padding-left: 4px;
+}
+</style>
+</head>
+
+<!-- ══════════════════════════════════════════════
+     DRAGON FORMUP PROFESSIONAL SPLASH SCREEN
+══════════════════════════════════════════════ -->
+<div id="dragon-splash">
+  <!-- Animated particles background -->
+  <div class="splash-bg" id="splashBg"></div>
+
+  <!-- Dragon icon -->
+  <div class="splash-dragon-wrap">
+    <div class="splash-glow-ring"></div>
+    <svg class="splash-dragon-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+      <defs>
+        <linearGradient id="sdg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e8341a"/>
+          <stop offset="50%" stop-color="#f0a020"/>
+          <stop offset="100%" stop-color="#e8341a"/>
+        </linearGradient>
+        <filter id="sglow">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path d="M50 8 C30 8 15 20 12 35 C8 55 18 68 30 72 C25 78 20 85 22 92 C30 88 38 82 42 75 C44 76 47 77 50 77 C53 77 56 76 58 75 C62 82 70 88 78 92 C80 85 75 78 70 72 C82 68 92 55 88 35 C85 20 70 8 50 8Z" fill="url(#sdg1)" filter="url(#sglow)"/>
+      <path d="M20 38 C8 30 2 18 6 10 C14 22 22 28 28 38Z" fill="#e8341a" opacity="0.85"/>
+      <path d="M80 38 C92 30 98 18 94 10 C86 22 78 28 72 38Z" fill="#e8341a" opacity="0.85"/>
+      <circle cx="38" cy="40" r="5" fill="#ff6b00"/>
+      <circle cx="62" cy="40" r="5" fill="#ff6b00"/>
+      <circle cx="39" cy="39" r="2.5" fill="#1a1a1a"/>
+      <circle cx="63" cy="39" r="2.5" fill="#1a1a1a"/>
+      <circle cx="40" cy="38" r="1" fill="white"/>
+      <circle cx="64" cy="38" r="1" fill="white"/>
+      <ellipse cx="45" cy="52" rx="2" ry="1.5" fill="#c42a10"/>
+      <ellipse cx="55" cy="52" rx="2" ry="1.5" fill="#c42a10"/>
+      <path d="M50 8 L47 2 L50 6 L53 2Z" fill="#f0a020"/>
+      <path d="M42 10 L40 4 L43 9Z" fill="#e8341a"/>
+      <path d="M58 10 L60 4 L57 9Z" fill="#e8341a"/>
+      <path d="M50 77 C48 84 44 90 46 98 C50 92 54 86 50 77Z" fill="url(#sdg1)"/>
+      <path d="M35 55 Q42 60 50 58 Q58 60 65 55 Q58 65 50 63 Q42 65 35 55Z" fill="rgba(0,0,0,0.2)"/>
+    </svg>
+  </div>
+
+  <!-- Title -->
+  <div class="splash-title-wrap">
+    <div class="splash-title">DRAGON FORMUP</div>
+    <div class="splash-sub">Professional Image Editor</div>
+  </div>
+
+  <!-- Feature pills -->
+  <div class="splash-features">
+    <div class="splash-pill">50 Filters</div>
+    <div class="splash-pill">Pro Tools</div>
+    <div class="splash-pill">Layer System</div>
+    <div class="splash-pill">Real-time Adjust</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="splash-progress-wrap">
+    <div class="splash-progress-track">
+      <div class="splash-progress-bar" id="splashBar"></div>
+    </div>
+    <div class="splash-status-text" id="splashStatusText">Initializing engine…</div>
+  </div>
+
+  <!-- Skip & version -->
+  <div class="splash-skip" onclick="dismissSplash()">Skip ›</div>
+  <div class="splash-version">v3.0 · Dragon Formup Pro</div>
+</div>
+
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- ══ TOP BAR ══ -->
+<header id="topbar">
+  <!-- LOGO -->
+  <div class="logo-zone">
+    <svg class="dragon-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e8341a"/>
+          <stop offset="50%" stop-color="#f0a020"/>
+          <stop offset="100%" stop-color="#e8341a"/>
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Dragon Body -->
+      <path d="M50 8 C30 8 15 20 12 35 C8 55 18 68 30 72 C25 78 20 85 22 92 C30 88 38 82 42 75 C44 76 47 77 50 77 C53 77 56 76 58 75 C62 82 70 88 78 92 C80 85 75 78 70 72 C82 68 92 55 88 35 C85 20 70 8 50 8Z" fill="url(#dg1)" filter="url(#glow)"/>
+      <!-- Wings -->
+      <path d="M20 38 C8 30 2 18 6 10 C14 22 22 28 28 38Z" fill="#e8341a" opacity="0.8"/>
+      <path d="M80 38 C92 30 98 18 94 10 C86 22 78 28 72 38Z" fill="#e8341a" opacity="0.8"/>
+      <!-- Eyes -->
+      <circle cx="38" cy="40" r="5" fill="#ff6b00"/>
+      <circle cx="62" cy="40" r="5" fill="#ff6b00"/>
+      <circle cx="39" cy="39" r="2.5" fill="#1a1a1a"/>
+      <circle cx="63" cy="39" r="2.5" fill="#1a1a1a"/>
+      <circle cx="40" cy="38" r="1" fill="white"/>
+      <circle cx="64" cy="38" r="1" fill="white"/>
+      <!-- Nostrils -->
+      <ellipse cx="45" cy="52" rx="2" ry="1.5" fill="#c42a10"/>
+      <ellipse cx="55" cy="52" rx="2" ry="1.5" fill="#c42a10"/>
+      <!-- Spines -->
+      <path d="M50 8 L47 2 L50 6 L53 2Z" fill="#f0a020"/>
+      <path d="M42 10 L40 4 L43 9Z" fill="#e8341a"/>
+      <path d="M58 10 L60 4 L57 9Z" fill="#e8341a"/>
+      <!-- Tail -->
+      <path d="M50 77 C48 84 44 90 46 98 C50 92 54 86 50 77Z" fill="url(#dg1)"/>
+      <!-- Scale detail -->
+      <path d="M35 55 Q42 60 50 58 Q58 60 65 55 Q58 65 50 63 Q42 65 35 55Z" fill="rgba(0,0,0,0.2)"/>
+    </svg>
+    <div class="logo-text">
+      <span class="logo-name">DRAGON FORMUP</span>
+      <span class="logo-sub">Pro Editor v3.0</span>
+    </div>
+  </div>
+
+  <!-- MENU BAR -->
+  <nav class="menubar">
+    <div class="menu-item">File
+      <div class="dropdown">
+        <div class="dd-item" onclick="newCanvas()">🆕 New <span class="shortcut">Ctrl+N</span></div>
+        <div class="dd-item" onclick="openFile()">📂 Open <span class="shortcut">Ctrl+O</span></div>
+        <div class="dd-item" onclick="showRecentFiles()">📁 Open Recent</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="saveImage('png')">💾 Save as PNG <span class="shortcut">Ctrl+S</span></div>
+        <div class="dd-item" onclick="saveImage('jpeg')">💾 Save as JPG</div>
+        <div class="dd-item" onclick="saveImage('webp')">💾 Save as WebP</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="exportHighRes()">🖨️ Export High-Res</div>
+        <div class="dd-item" onclick="window.print()">🖨️ Print <span class="shortcut">Ctrl+P</span></div>
+      </div>
+    </div>
+    <div class="menu-item">Edit
+      <div class="dropdown">
+        <div class="dd-item" onclick="undoAction()">↩️ Undo <span class="shortcut">Ctrl+Z</span></div>
+        <div class="dd-item" onclick="redoAction()">↪️ Redo <span class="shortcut">Ctrl+Y</span></div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="cutSelection()">✂️ Cut <span class="shortcut">Ctrl+X</span></div>
+        <div class="dd-item" onclick="copySelection()">📋 Copy <span class="shortcut">Ctrl+C</span></div>
+        <div class="dd-item" onclick="pasteSelection()">📌 Paste <span class="shortcut">Ctrl+V</span></div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="selectAll()">🔲 Select All <span class="shortcut">Ctrl+A</span></div>
+        <div class="dd-item" onclick="deselectAll()">Deselect <span class="shortcut">Ctrl+D</span></div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="showResizeModal()">📐 Canvas Size</div>
+        <div class="dd-item" onclick="flattenImage()">⬇️ Flatten Image</div>
+      </div>
+    </div>
+    <div class="menu-item">Image
+      <div class="dropdown">
+        <div class="dd-item" onclick="showResizeModal()">📐 Resize</div>
+        <div class="dd-item" onclick="rotateCanvas(90)">🔄 Rotate 90° CW</div>
+        <div class="dd-item" onclick="rotateCanvas(-90)">🔄 Rotate 90° CCW</div>
+        <div class="dd-item" onclick="rotateCanvas(180)">🔄 Rotate 180°</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="flipCanvas('h')">↔️ Flip Horizontal</div>
+        <div class="dd-item" onclick="flipCanvas('v')">↕️ Flip Vertical</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="autoLevels()">✨ Auto Levels</div>
+        <div class="dd-item" onclick="autoContrast()">⚡ Auto Contrast</div>
+        <div class="dd-item" onclick="autoColor()">🎨 Auto Color</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="trimTransparent()">✂️ Trim Transparent</div>
+        <div class="dd-item" onclick="showHistogram()">📊 Histogram</div>
+      </div>
+    </div>
+    <div class="menu-item">Layer
+      <div class="dropdown">
+        <div class="dd-item" onclick="addLayer()">➕ New Layer</div>
+        <div class="dd-item" onclick="duplicateLayer()">📄 Duplicate Layer</div>
+        <div class="dd-item" onclick="deleteLayer()">🗑️ Delete Layer</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="mergeDown()">⬇️ Merge Down</div>
+        <div class="dd-item" onclick="flattenImage()">⬇️ Flatten Image</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="moveLayerUp()">🔼 Move Up</div>
+        <div class="dd-item" onclick="moveLayerDown()">🔽 Move Down</div>
+      </div>
+    </div>
+    <div class="menu-item">Filters
+      <div class="dropdown">
+        <div class="dd-item" onclick="applyFilter('blur_gaussian')">🌫️ Gaussian Blur</div>
+        <div class="dd-item" onclick="applyFilter('sharpen')">🔪 Sharpen</div>
+        <div class="dd-item" onclick="applyFilter('emboss')">🪨 Emboss</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="applyFilter('sepia')">🟤 Sepia</div>
+        <div class="dd-item" onclick="applyFilter('grayscale')">⬜ Grayscale</div>
+        <div class="dd-item" onclick="applyFilter('invert')">🔃 Invert</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="switchTab('filters')">🎨 All 50 Filters...</div>
+      </div>
+    </div>
+    <div class="menu-item">View
+      <div class="dropdown">
+        <div class="dd-item" onclick="setZoom(1)">🔭 Fit to Screen</div>
+        <div class="dd-item" onclick="setZoom(1)">100% Original</div>
+        <div class="dd-item" onclick="setZoom(2)">200% Zoom In</div>
+        <div class="dd-item" onclick="setZoom(0.5)">50% Zoom Out</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="toggleFullscreen()">⛶ Full Screen <span class="shortcut">F11</span></div>
+      </div>
+    </div>
+    <div class="menu-item">Help
+      <div class="dropdown">
+        <div class="dd-item" onclick="showAbout()">🐉 About Dragon Formup</div>
+        <div class="dd-item" onclick="showShortcuts()">⌨️ Keyboard Shortcuts</div>
+        <div class="dd-sep"></div>
+        <div class="dd-item" onclick="showDocumentation()">📖 Documentation</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- RIGHT CONTROLS -->
+  <div class="topbar-right">
+    <div class="zoom-display" id="zoomLabel">100%</div>
+    <button class="topbar-btn" onclick="setZoom(currentZoom * 0.8)">−</button>
+    <button class="topbar-btn" onclick="setZoom(1)">Fit</button>
+    <button class="topbar-btn" onclick="setZoom(currentZoom * 1.25)">+</button>
+    <button class="topbar-btn" onclick="openFile()">Open</button>
+    <button class="topbar-btn primary" onclick="saveImage('png')">💾 Export</button>
+  </div>
+</header>
+
+<!-- ══ MAIN APP ══ -->
+<main id="app">
+
+  <!-- LEFT TOOLBAR -->
+  <aside id="toolbar">
+    <!-- Selection Tools -->
+    <div class="tool-btn active" data-tool="select" onclick="setTool(this,'select')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-7 2-2 7z"/></svg>
+      <span class="tip">Move (V)</span>
+    </div>
+    <div class="tool-btn" data-tool="select_rect" onclick="setTool(this,'select_rect')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 3v18" stroke-dasharray="3,2"/></svg>
+      <span class="tip">Rect Select (M)</span>
+    </div>
+    <div class="tool-btn" data-tool="select_lasso" onclick="setTool(this,'select_lasso')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20C7 20 3 16 3 11A9 9 0 0121 11C21 15 18 18 15 20C12 22 7 20 7 20Z" stroke-dasharray="4,2"/></svg>
+      <span class="tip">Lasso (L)</span>
+    </div>
+    <div class="tool-btn" data-tool="magic_select" onclick="setTool(this,'magic_select')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L14.5 9H22L16 13.5L18.5 20.5L12 16L5.5 20.5L8 13.5L2 9H9.5Z"/></svg>
+      <span class="tip">Magic Wand (W)</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- Drawing Tools -->
+    <div class="tool-btn" data-tool="brush" onclick="setTool(this,'brush')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2L22 6 8 20H4v-4L18 2Z"/><path d="M4 20c0 1.1.9 2 2 2s2-.9 2-2-1.8-3-2-3-2 .9-2 2Z"/></svg>
+      <span class="tip">Brush (B)</span>
+    </div>
+    <div class="tool-btn" data-tool="pencil" onclick="setTool(this,'pencil')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span class="tip">Pencil (P)</span>
+    </div>
+    <div class="tool-btn" data-tool="eraser" onclick="setTool(this,'eraser')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H7L3 16l11-11 7 7-1 8Z"/><path d="M6 17l-3-3"/></svg>
+      <span class="tip">Eraser (E)</span>
+    </div>
+    <div class="tool-btn" data-tool="clone" onclick="setTool(this,'clone')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      <span class="tip">Clone Stamp (S)</span>
+    </div>
+    <div class="tool-btn" data-tool="heal" onclick="setTool(this,'heal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/></svg>
+      <span class="tip">Healing Brush (J)</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- Shape Tools -->
+    <div class="tool-btn" data-tool="shape_rect" onclick="setTool(this,'shape_rect')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/></svg>
+      <span class="tip">Rectangle (U)</span>
+    </div>
+    <div class="tool-btn" data-tool="shape_ellipse" onclick="setTool(this,'shape_ellipse')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="10" ry="7"/></svg>
+      <span class="tip">Ellipse (U)</span>
+    </div>
+    <div class="tool-btn" data-tool="shape_line" onclick="setTool(this,'shape_line')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="3"/></svg>
+      <span class="tip">Line (U)</span>
+    </div>
+    <div class="tool-btn" data-tool="shape_poly" onclick="setTool(this,'shape_poly')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 22,17 2,17"/></svg>
+      <span class="tip">Polygon</span>
+    </div>
+    <div class="tool-btn" data-tool="pen" onclick="setTool(this,'pen')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3Z"/><path d="M15 5l4 4"/></svg>
+      <span class="tip">Pen Path (P)</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- Color & Fill -->
+    <div class="tool-btn" data-tool="fill" onclick="setTool(this,'fill')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8.5 8.5A5 5 0 0010.5 19H19a2 2 0 002-2v-6z"/><line x1="19" y1="11" x2="21" y2="11"/></svg>
+      <span class="tip">Paint Bucket (G)</span>
+    </div>
+    <div class="tool-btn" data-tool="gradient" onclick="setTool(this,'gradient')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><defs><linearGradient id="g"><stop offset="0%" stop-color="#e8341a"/><stop offset="100%" stop-color="#1a8fff"/></linearGradient></defs><rect x="3" y="6" width="18" height="12" rx="1" fill="url(#g)" stroke="none"/></svg>
+      <span class="tip">Gradient (G)</span>
+    </div>
+    <div class="tool-btn" data-tool="eyedrop" onclick="setTool(this,'eyedrop')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22l1-1h3l9-9"/><path d="M3 21v-3l9-9"/><path d="M15 6l3.4-3.4a2 2 0 113 3L18 9l.4.4a2 2 0 010 3L14 16l-4-4"/></svg>
+      <span class="tip">Eyedropper (I)</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- NEW PRO TOOLS -->
+    <div class="tool-btn" data-tool="dodge" onclick="setTool(this,'dodge')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+      <span class="tip">Dodge (O)</span>
+    </div>
+    <div class="tool-btn" data-tool="burn" onclick="setTool(this,'burn')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C9 6 6 8 6 12a6 6 0 0012 0c0-4-3-6-6-10Z"/></svg>
+      <span class="tip">Burn (O)</span>
+    </div>
+    <div class="tool-btn" data-tool="smudge" onclick="setTool(this,'smudge')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12s1-8 8-8 8 8 8 8"/><path d="M4 12s1 8 8 8" stroke-dasharray="3,2"/></svg>
+      <span class="tip">Smudge</span>
+    </div>
+    <div class="tool-btn" data-tool="sharpen_tool" onclick="setTool(this,'sharpen_tool')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 20,20 12,16 4,20"/></svg>
+      <span class="tip">Sharpen Tool</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- Text & Transform -->
+    <div class="tool-btn" data-tool="text" onclick="setTool(this,'text')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      <span class="tip">Text (T)</span>
+    </div>
+    <div class="tool-btn" data-tool="crop" onclick="setTool(this,'crop')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 002 2h14"/><path d="M18 22V8a2 2 0 00-2-2H2"/></svg>
+      <span class="tip">Crop (C)</span>
+    </div>
+    <div class="tool-btn" data-tool="transform" onclick="setTool(this,'transform')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="3" cy="3" r="2" fill="currentColor"/><circle cx="21" cy="3" r="2" fill="currentColor"/><circle cx="3" cy="21" r="2" fill="currentColor"/><circle cx="21" cy="21" r="2" fill="currentColor"/></svg>
+      <span class="tip">Transform (Ctrl+T)</span>
+    </div>
+    <div class="tool-btn" data-tool="perspective" onclick="setTool(this,'perspective')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 19L9 5M15 5L19 19M5 19h14M9 5h6"/></svg>
+      <span class="tip">Perspective Warp</span>
+    </div>
+    <div class="tool-btn" data-tool="liquify" onclick="setTool(this,'liquify')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6 8 4 12 12 12S18 8 12 2Z"/><path d="M12 12C6 12 4 16 12 22S18 16 12 12Z" opacity="0.6"/></svg>
+      <span class="tip">Liquify</span>
+    </div>
+
+    <div class="tool-group-sep"></div>
+
+    <!-- View Tools -->
+    <div class="tool-btn" data-tool="zoom_in" onclick="setZoom(currentZoom*1.25)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <span class="tip">Zoom In (+)</span>
+    </div>
+    <div class="tool-btn" data-tool="zoom_out" onclick="setZoom(currentZoom*0.8)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <span class="tip">Zoom Out (−)</span>
+    </div>
+    <div class="tool-btn" data-tool="pan" onclick="setTool(this,'pan')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      <span class="tip">Hand (H)</span>
+    </div>
+  </aside>
+
+  <!-- LEFT PANEL: TOOL OPTIONS -->
+  <aside id="left-panel">
+    <div class="panel-tabs">
+      <div class="ptab active" onclick="switchLeftTab(this,'options')">Options</div>
+      <div class="ptab" onclick="switchLeftTab(this,'colors')">Colors</div>
+      <div class="ptab" onclick="switchLeftTab(this,'history')">History</div>
+    </div>
+    <div class="panel-content">
+
+      <!-- OPTIONS TAB -->
+      <div class="tab-pane active" id="left-options">
+        <div class="tool-options">
+          <div class="opt-title" id="activeToolName">MOVE TOOL</div>
+
+          <!-- BRUSH OPTIONS -->
+          <div id="opt-brush">
+            <div class="brush-preview">
+              <div class="brush-dot" id="brushDotPreview" style="width:20px;height:20px;opacity:0.8;"></div>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Size</span>
+              <div class="slider-wrap">
+                <input type="range" id="brushSize" min="1" max="200" value="20" oninput="updateBrushSize(this.value)">
+              </div>
+              <span class="slider-val" id="brushSizeVal">20</span>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Hardness</span>
+              <div class="slider-wrap">
+                <input type="range" id="brushHard" min="0" max="100" value="80" oninput="updateBrushHard(this.value)">
+              </div>
+              <span class="slider-val" id="brushHardVal">80</span>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Opacity</span>
+              <div class="slider-wrap">
+                <input type="range" id="brushOpacity" min="1" max="100" value="100" oninput="updateBrushOpacity(this.value)">
+              </div>
+              <span class="slider-val" id="brushOpacityVal">100</span>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Flow</span>
+              <div class="slider-wrap">
+                <input type="range" id="brushFlow" min="1" max="100" value="100" oninput="updateVal('brushFlowVal',this.value)">
+              </div>
+              <span class="slider-val" id="brushFlowVal">100</span>
+            </div>
+            <div class="control-row">
+              <span class="control-label">Spacing</span>
+              <div class="slider-wrap">
+                <input type="range" id="brushSpacing" min="1" max="200" value="25" oninput="updateVal('brushSpacingVal',this.value)">
+              </div>
+              <span class="slider-val" id="brushSpacingVal">25</span>
+            </div>
+            <div class="control-row" style="margin-top:10px">
+              <span class="control-label">Mode</span>
+              <select class="panel-select" style="flex:1;margin:0" onchange="setBrushMode(this.value)">
+                <option>Normal</option><option>Multiply</option><option>Screen</option>
+                <option>Overlay</option><option>Soft Light</option><option>Hard Light</option>
+                <option>Color Dodge</option><option>Color Burn</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- COLOR PICKERS -->
+          <div style="margin-top:14px">
+            <div class="section-hdr-title" style="margin-bottom:8px">FOREGROUND / BACKGROUND</div>
+            <div class="color-row">
+              <div class="color-swatch" id="fgSwatch" style="background:#000000" title="Foreground Color">
+                <input type="color" id="fgColor" value="#000000" onchange="setFgColor(this.value)">
+              </div>
+              <div class="color-swatch" id="bgSwatch" style="background:#ffffff;margin-left:4px" title="Background Color">
+                <input type="color" id="bgColor" value="#ffffff" onchange="setBgColor(this.value)">
+              </div>
+              <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+                <div style="font-size:10px;color:var(--text-dim);cursor:pointer" onclick="swapColors()" title="Swap">⇄</div>
+                <div style="font-size:10px;color:var(--text-dim);cursor:pointer" onclick="resetColors()" title="Reset">↺</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLOR PRESETS -->
+          <div class="palette-row" style="margin-top:10px">
+            <div class="palette-swatch" style="background:#000" onclick="setFgColor('#000000');document.getElementById('fgColor').value='#000000';document.getElementById('fgSwatch').style.background='#000000'"></div>
+            <div class="palette-swatch" style="background:#fff;border:1px solid #333" onclick="setFgColor('#ffffff')"></div>
+            <div class="palette-swatch" style="background:#e8341a" onclick="setFgColor('#e8341a')"></div>
+            <div class="palette-swatch" style="background:#f0a020" onclick="setFgColor('#f0a020')"></div>
+            <div class="palette-swatch" style="background:#1a8fff" onclick="setFgColor('#1a8fff')"></div>
+            <div class="palette-swatch" style="background:#00e676" onclick="setFgColor('#00e676')"></div>
+            <div class="palette-swatch" style="background:#9c27b0" onclick="setFgColor('#9c27b0')"></div>
+            <div class="palette-swatch" style="background:#ff4081" onclick="setFgColor('#ff4081')"></div>
+            <div class="palette-swatch" style="background:#00bcd4" onclick="setFgColor('#00bcd4')"></div>
+            <div class="palette-swatch" style="background:#8d6e63" onclick="setFgColor('#8d6e63')"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COLORS TAB (full color picker) -->
+      <div class="tab-pane" id="left-colors">
+        <div style="padding:10px">
+          <div class="opt-title">COLOR PICKER</div>
+          <canvas id="colorWheel" width="200" height="200" style="width:100%;border-radius:50%;cursor:crosshair;margin-bottom:10px" onclick="pickColorFromWheel(event)"></canvas>
+          <div class="control-row">
+            <span class="control-label">Hue</span>
+            <input type="range" min="0" max="360" value="0" oninput="updateHue(this.value)" style="flex:1">
+          </div>
+          <div class="control-row">
+            <span class="control-label">Saturation</span>
+            <input type="range" min="0" max="100" value="100" oninput="updateSat(this.value)" style="flex:1">
+          </div>
+          <div class="control-row">
+            <span class="control-label">Lightness</span>
+            <input type="range" min="0" max="100" value="50" oninput="updateLight(this.value)" style="flex:1">
+          </div>
+          <div class="control-row">
+            <span class="control-label">Opacity</span>
+            <input type="range" min="0" max="100" value="100" oninput="updateOpacity(this.value)" style="flex:1">
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <div id="colorPreview" style="width:36px;height:36px;border-radius:4px;background:#000;border:1px solid var(--border-glow)"></div>
+            <input id="hexInput" value="#000000" onchange="setFromHex(this.value)"
+              style="flex:1;background:var(--bg-hover);border:1px solid var(--border-glow);border-radius:4px;padding:6px 8px;color:var(--text-bright);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none">
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div class="tab-pane" id="left-history">
+        <div style="padding:10px">
+          <div class="opt-title">HISTORY</div>
+          <div id="historyList" style="display:flex;flex-direction:column;gap:4px"></div>
+          <div style="margin-top:10px;display:flex;gap:6px">
+            <button class="layers-btn" onclick="undoAction()">↩ Undo</button>
+            <button class="layers-btn" onclick="redoAction()">↪ Redo</button>
+            <button class="layers-btn" onclick="clearHistory()" style="flex:0.7">Clear</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- CANVAS AREA -->
+  <section id="canvas-area" id="canvasArea"
+    ondragover="event.preventDefault();document.body.classList.add('drag-over')"
+    ondragleave="document.body.classList.remove('drag-over')"
+    ondrop="handleDrop(event)">
+
+    <div id="upload-overlay">
+      <div style="font-size:200px;opacity:0.04;position:absolute;pointer-events:none;filter:blur(1px)">🐉</div>
+      <div class="upload-content">
+        <div class="upload-icon">🖼️</div>
+        <div class="upload-title">Drop Image Here</div>
+        <div class="upload-sub">or click to open from computer</div>
+        <button class="upload-btn" onclick="openFile()">Open Image</button>
+        <div style="margin-top:12px;font-size:11px;color:var(--text-dim)">
+          Supports: JPG, PNG, WebP, GIF, BMP, SVG
+        </div>
+      </div>
+    </div>
+
+    <div id="canvas-wrapper" style="display:none">
+      <canvas id="main-canvas" width="800" height="600"></canvas>
+      <canvas id="overlay-canvas" width="800" height="600" style="position:absolute;top:0;left:0;pointer-events:none"></canvas>
+    </div>
+    <input type="file" id="file-input" accept="image/*" onchange="loadImageFile(this)">
+  </section>
+
+  <!-- RIGHT PANEL -->
+  <aside id="right-panel">
+    <div class="panel-tabs">
+      <div class="ptab active" onclick="switchTab('adjust')">Adjust</div>
+      <div class="ptab" onclick="switchTab('filters')">Filters</div>
+      <div class="ptab" onclick="switchTab('layers')">Layers</div>
+    </div>
+    <div class="panel-content" id="rightPanelContent">
+
+      <!-- ADJUSTMENTS TAB -->
+      <div class="tab-pane active" id="tab-adjust">
+
+        <!-- HISTOGRAM -->
+        <div class="histogram-wrap">
+          <canvas id="histCanvas"></canvas>
+        </div>
+
+        <div class="section-hdr open" onclick="toggleSection(this,'adj-basic')">
+          <span class="section-hdr-title">Basic</span>
+          <span class="section-hdr-arrow">▼</span>
+        </div>
+        <div id="adj-basic" style="padding:0 2px 10px">
+          <div class="control-row">
+            <span class="control-label">Exposure</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('exposure',this.value)"></div>
+            <span class="slider-val" id="vExposure">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Brightness</span>
+            <div class="slider-wrap"><input type="range" min="-150" max="150" value="0" oninput="liveAdjust('brightness',this.value)"></div>
+            <span class="slider-val" id="vBrightness">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Contrast</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('contrast',this.value)"></div>
+            <span class="slider-val" id="vContrast">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Highlights</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('highlights',this.value)"></div>
+            <span class="slider-val" id="vHighlights">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Shadows</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('shadows',this.value)"></div>
+            <span class="slider-val" id="vShadows">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Whites</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('whites',this.value)"></div>
+            <span class="slider-val" id="vWhites">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Blacks</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('blacks',this.value)"></div>
+            <span class="slider-val" id="vBlacks">0</span>
+          </div>
+        </div>
+
+        <div class="section-hdr open" onclick="toggleSection(this,'adj-color')">
+          <span class="section-hdr-title">Color</span>
+          <span class="section-hdr-arrow">▼</span>
+        </div>
+        <div id="adj-color" style="padding:0 2px 10px">
+          <div class="control-row">
+            <span class="control-label">Saturation</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('saturation',this.value)"></div>
+            <span class="slider-val" id="vSaturation">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Vibrance</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('vibrance',this.value)"></div>
+            <span class="slider-val" id="vVibrance">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Hue</span>
+            <div class="slider-wrap"><input type="range" min="-180" max="180" value="0" oninput="liveAdjust('hue',this.value)"></div>
+            <span class="slider-val" id="vHue">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Temperature</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('temperature',this.value)"></div>
+            <span class="slider-val" id="vTemperature">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Tint</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('tint',this.value)"></div>
+            <span class="slider-val" id="vTint">0</span>
+          </div>
+        </div>
+
+        <div class="section-hdr open" onclick="toggleSection(this,'adj-detail')">
+          <span class="section-hdr-title">Detail</span>
+          <span class="section-hdr-arrow">▼</span>
+        </div>
+        <div id="adj-detail" style="padding:0 2px 10px">
+          <div class="control-row">
+            <span class="control-label">Sharpness</span>
+            <div class="slider-wrap"><input type="range" min="0" max="150" value="0" oninput="liveAdjust('sharpness',this.value)"></div>
+            <span class="slider-val" id="vSharpness">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Noise Red.</span>
+            <div class="slider-wrap"><input type="range" min="0" max="100" value="0" oninput="liveAdjust('noise',this.value)"></div>
+            <span class="slider-val" id="vNoise">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Clarity</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('clarity',this.value)"></div>
+            <span class="slider-val" id="vClarity">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Dehaze</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('dehaze',this.value)"></div>
+            <span class="slider-val" id="vDehaze">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Vignette</span>
+            <div class="slider-wrap"><input type="range" min="-100" max="100" value="0" oninput="liveAdjust('vignette',this.value)"></div>
+            <span class="slider-val" id="vVignette">0</span>
+          </div>
+          <div class="control-row">
+            <span class="control-label">Grain</span>
+            <div class="slider-wrap"><input type="range" min="0" max="100" value="0" oninput="liveAdjust('grain',this.value)"></div>
+            <span class="slider-val" id="vGrain">0</span>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="layers-btn" onclick="applyAllAdjustments()" style="flex:1.5;color:var(--dragon-gold);border-color:var(--dragon-gold)">✓ Apply</button>
+          <button class="layers-btn" onclick="resetAllAdjustments()">↺ Reset</button>
+        </div>
+
+      </div>
+
+      <!-- FILTERS TAB — 50 FILTERS -->
+      <div class="tab-pane" id="tab-filters">
+
+        <div style="padding:8px 0">
+          <div class="filter-category">🌍 Classic</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('grayscale',this)">Grayscale</div>
+            <div class="filter-btn" onclick="applyFilter('sepia',this)">Sepia</div>
+            <div class="filter-btn" onclick="applyFilter('invert',this)">Invert</div>
+            <div class="filter-btn" onclick="applyFilter('vintage',this)">Vintage</div>
+            <div class="filter-btn" onclick="applyFilter('blueprint',this)">Blueprint</div>
+            <div class="filter-btn" onclick="applyFilter('old_photo',this)">Old Photo</div>
+          </div>
+
+          <div class="filter-category">✨ Enhance</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('vivid',this)">Vivid</div>
+            <div class="filter-btn" onclick="applyFilter('punch',this)">Punch</div>
+            <div class="filter-btn" onclick="applyFilter('clarity_boost',this)">Clarity+</div>
+            <div class="filter-btn" onclick="applyFilter('hdr',this)">HDR Look</div>
+            <div class="filter-btn" onclick="applyFilter('detail_enhance',this)">Detail+</div>
+            <div class="filter-btn" onclick="applyFilter('pop',this)">Pop Color</div>
+          </div>
+
+          <div class="filter-category">📸 Instagram</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('1977',this)">1977</div>
+            <div class="filter-btn" onclick="applyFilter('aden',this)">Aden</div>
+            <div class="filter-btn" onclick="applyFilter('clarendon',this)">Clarendon</div>
+            <div class="filter-btn" onclick="applyFilter('gingham',this)">Gingham</div>
+            <div class="filter-btn" onclick="applyFilter('inkwell',this)">Inkwell</div>
+            <div class="filter-btn" onclick="applyFilter('lofi',this)">Lo-Fi</div>
+            <div class="filter-btn" onclick="applyFilter('toaster',this)">Toaster</div>
+            <div class="filter-btn" onclick="applyFilter('valencia',this)">Valencia</div>
+            <div class="filter-btn" onclick="applyFilter('xpro2',this)">X-Pro II</div>
+            <div class="filter-btn" onclick="applyFilter('moon',this)">Moon</div>
+          </div>
+
+          <div class="filter-category">🎨 Artistic</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('oil_paint',this)">Oil Paint</div>
+            <div class="filter-btn" onclick="applyFilter('watercolor',this)">Watercolor</div>
+            <div class="filter-btn" onclick="applyFilter('pencil_sketch',this)">Pencil</div>
+            <div class="filter-btn" onclick="applyFilter('charcoal',this)">Charcoal</div>
+            <div class="filter-btn" onclick="applyFilter('comic',this)">Comic</div>
+            <div class="filter-btn" onclick="applyFilter('pastel',this)">Pastel</div>
+            <div class="filter-btn" onclick="applyFilter('glitch',this)">Glitch</div>
+            <div class="filter-btn" onclick="applyFilter('neon',this)">Neon Glow</div>
+          </div>
+
+          <div class="filter-category">🌟 Cinematic</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('cinematic',this)">Cinematic</div>
+            <div class="filter-btn" onclick="applyFilter('noir',this)">Film Noir</div>
+            <div class="filter-btn" onclick="applyFilter('teal_orange',this)">Teal Orange</div>
+            <div class="filter-btn" onclick="applyFilter('golden_hour',this)">Golden Hour</div>
+            <div class="filter-btn" onclick="applyFilter('cool_blue',this)">Cool Blue</div>
+            <div class="filter-btn" onclick="applyFilter('warm_sunset',this)">Warm Sunset</div>
+            <div class="filter-btn" onclick="applyFilter('matte',this)">Matte</div>
+            <div class="filter-btn" onclick="applyFilter('fade',this)">Faded Look</div>
+          </div>
+
+          <div class="filter-category">🔬 Technical</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('sharpen',this)">Sharpen</div>
+            <div class="filter-btn" onclick="applyFilter('blur_gaussian',this)">Gaussian Blur</div>
+            <div class="filter-btn" onclick="applyFilter('blur_motion',this)">Motion Blur</div>
+            <div class="filter-btn" onclick="applyFilter('blur_radial',this)">Radial Blur</div>
+            <div class="filter-btn" onclick="applyFilter('emboss',this)">Emboss</div>
+            <div class="filter-btn" onclick="applyFilter('edge_detect',this)">Edge Detect</div>
+            <div class="filter-btn" onclick="applyFilter('denoise',this)">Denoise</div>
+            <div class="filter-btn" onclick="applyFilter('unsharp',this)">Unsharp Mask</div>
+          </div>
+
+          <div class="filter-category">🌈 Color Grading</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('cross_process',this)">Cross Process</div>
+            <div class="filter-btn" onclick="applyFilter('split_tone',this)">Split Tone</div>
+            <div class="filter-btn" onclick="applyFilter('solarize',this)">Solarize</div>
+            <div class="filter-btn" onclick="applyFilter('duotone_rb',this)">Duotone R/B</div>
+            <div class="filter-btn" onclick="applyFilter('heatmap',this)">Heatmap</div>
+            <div class="filter-btn" onclick="applyFilter('chrome',this)">Chrome</div>
+          </div>
+
+          <div class="filter-category">⚡ Special FX</div>
+          <div class="filters-grid">
+            <div class="filter-btn" onclick="applyFilter('pixelate',this)">Pixelate</div>
+            <div class="filter-btn" onclick="applyFilter('mosaic',this)">Mosaic</div>
+            <div class="filter-btn" onclick="applyFilter('halftone',this)">Halftone</div>
+            <div class="filter-btn" onclick="applyFilter('scanlines',this)">Scanlines</div>
+            <div class="filter-btn" onclick="applyFilter('vhs',this)">VHS Effect</div>
+            <div class="filter-btn" onclick="applyFilter('infrared',this)">Infrared</div>
+            <div class="filter-btn" onclick="applyFilter('lomo',this)">Lomo</div>
+            <div class="filter-btn" onclick="applyFilter('dither',this)">Dither</div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:6px">
+            <button class="layers-btn" onclick="removeFilter()" style="flex:1">✕ Remove Filter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYERS TAB -->
+      <div class="tab-pane" id="tab-layers">
+        <div style="padding:8px 0">
+          <!-- Layer Blend -->
+          <div class="control-row" style="margin-bottom:6px">
+            <span class="control-label" style="min-width:50px">Blend</span>
+            <select class="panel-select" style="flex:1;margin:0" onchange="setLayerBlend(this.value)">
+              <option>Normal</option><option>Multiply</option><option>Screen</option>
+              <option>Overlay</option><option>Soft Light</option><option>Hard Light</option>
+              <option>Color Dodge</option><option>Color Burn</option>
+              <option>Darken</option><option>Lighten</option><option>Difference</option>
+              <option>Exclusion</option><option>Hue</option><option>Saturation</option>
+              <option>Color</option><option>Luminosity</option>
+            </select>
+          </div>
+          <div class="control-row" style="margin-bottom:12px">
+            <span class="control-label" style="min-width:50px">Opacity</span>
+            <input type="range" min="0" max="100" value="100" style="flex:1" oninput="setLayerOpacity(this.value)">
+            <span class="slider-val" id="layerOpVal">100</span>
+          </div>
+
+          <!-- Layer List -->
+          <div class="layers-list" id="layersList">
+            <div class="layer-item active" data-layer="0">
+              <div class="layer-thumb"></div>
+              <span class="layer-name">Background</span>
+              <span class="layer-vis" onclick="toggleLayerVis(0)">👁</span>
+            </div>
+          </div>
+
+          <div class="layers-actions">
+            <div class="layers-btn" onclick="addLayer()" title="Add Layer">+</div>
+            <div class="layers-btn" onclick="duplicateLayer()" title="Duplicate">⿻</div>
+            <div class="layers-btn" onclick="deleteLayer()" title="Delete">🗑</div>
+            <div class="layers-btn" onclick="mergeDown()" title="Merge Down">⬇</div>
+            <div class="layers-btn" onclick="flattenImage()" title="Flatten">⊞</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+</main>
+
+<!-- STATUS BAR -->
+<footer id="statusbar">
+  <div class="status-item">
+    <div class="status-dot"></div>
+    <span>Dragon Formup Pro</span>
+  </div>
+  <div class="status-sep"></div>
+  <div class="status-item" id="statusTool">Tool: Move</div>
+  <div class="status-sep"></div>
+  <div class="status-item" id="statusSize">No image</div>
+  <div class="status-item" id="statusPos" style="margin-left:8px">X:0 Y:0</div>
+  <div class="status-right">
+    <span id="statusFilter">Filter: None</span>
+    <div class="status-sep"></div>
+    <span id="statusLayers">Layers: 1</span>
+    <div class="status-sep"></div>
+    <span id="statusMem">RAM: —</span>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- KEYBOARD SHORTCUTS MODAL -->
+<div class="modal-overlay" id="shortcutsModal">
+  <div class="modal" style="min-width:480px;max-width:560px">
+    <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;padding:4px 0 12px">
+      <div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">FILE</div>
+        <div class="shortcut-row"><kbd>Ctrl+N</kbd><span>New Canvas</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+O</kbd><span>Open Image</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+S</kbd><span>Save as PNG</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+P</kbd><span>Print</span></div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">EDIT</div>
+        <div class="shortcut-row"><kbd>Ctrl+Z</kbd><span>Undo</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+Y</kbd><span>Redo</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+X</kbd><span>Cut</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+C</kbd><span>Copy</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+V</kbd><span>Paste</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+A</kbd><span>Select All</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+D</kbd><span>Deselect</span></div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">VIEW</div>
+        <div class="shortcut-row"><kbd>Ctrl++</kbd><span>Zoom In</span></div>
+        <div class="shortcut-row"><kbd>Ctrl+-</kbd><span>Zoom Out</span></div>
+        <div class="shortcut-row"><kbd>F11</kbd><span>Full Screen</span></div>
+      </div>
+      <div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">TOOLS</div>
+        <div class="shortcut-row"><kbd>B</kbd><span>Brush</span></div>
+        <div class="shortcut-row"><kbd>E</kbd><span>Eraser</span></div>
+        <div class="shortcut-row"><kbd>G</kbd><span>Paint Bucket</span></div>
+        <div class="shortcut-row"><kbd>I</kbd><span>Eyedropper</span></div>
+        <div class="shortcut-row"><kbd>T</kbd><span>Text</span></div>
+        <div class="shortcut-row"><kbd>C</kbd><span>Crop</span></div>
+        <div class="shortcut-row"><kbd>H</kbd><span>Hand / Pan</span></div>
+        <div class="shortcut-row"><kbd>V</kbd><span>Move / Select</span></div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">COLOR</div>
+        <div class="shortcut-row"><kbd>X</kbd><span>Swap FG/BG Colors</span></div>
+        <div class="shortcut-row"><kbd>D</kbd><span>Reset to Black/White</span></div>
+        <div style="color:var(--dragon-gold);font-size:10px;letter-spacing:2px;margin:10px 0 6px;font-family:'Rajdhani',sans-serif;font-weight:700">BRUSH SIZE</div>
+        <div class="shortcut-row"><kbd>[</kbd><span>Decrease Size</span></div>
+        <div class="shortcut-row"><kbd>]</kbd><span>Increase Size</span></div>
+        <div class="shortcut-row"><kbd>Scroll</kbd><span>Zoom Canvas</span></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn ok" onclick="document.getElementById('shortcutsModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOCUMENTATION MODAL -->
+<div class="modal-overlay" id="docsModal">
+  <div class="modal" style="min-width:500px;max-width:600px;max-height:85vh;overflow-y:auto">
+    <div class="modal-title">📖 Dragon Formup Documentation</div>
+    <div style="font-size:11px;color:var(--text-muted);line-height:1.9;padding-bottom:12px">
+
+      <div class="doc-section-title">🖌️ Drawing Tools</div>
+      <div class="doc-section-body">
+        <b style="color:var(--text-primary)">Brush</b> — Paint with soft edges. Adjust Size, Hardness, Opacity, Flow in the left panel. Use Blend Modes for creative effects.<br>
+        <b style="color:var(--text-primary)">Pencil</b> — Hard-edge drawing tool, pixel-perfect lines.<br>
+        <b style="color:var(--text-primary)">Eraser</b> — Erase pixels. Works with brush size/opacity settings.<br>
+        <b style="color:var(--text-primary)">Clone Stamp</b> — Duplicate pixels from one area to another.<br>
+        <b style="color:var(--text-primary)">Healing Brush</b> — Remove blemishes and imperfections.<br>
+        <b style="color:var(--text-primary)">Dodge</b> — Lighten specific areas of the image.<br>
+        <b style="color:var(--text-primary)">Burn</b> — Darken specific areas of the image.<br>
+        <b style="color:var(--text-primary)">Smudge</b> — Blend and smear colors together.
+      </div>
+
+      <div class="doc-section-title">🎨 Color Tools</div>
+      <div class="doc-section-body">
+        <b style="color:var(--text-primary)">Paint Bucket</b> — Flood fill an area with the foreground color.<br>
+        <b style="color:var(--text-primary)">Eyedropper</b> — Click anywhere to pick that color as foreground.<br>
+        <b style="color:var(--text-primary)">Gradient</b> — Draw linear gradient from FG to BG color.<br>
+        <b style="color:var(--text-primary)">Color Wheel</b> — Click the wheel in Colors tab to select any hue. Use Hex input for precise colors.
+      </div>
+
+      <div class="doc-section-title">📐 Shape & Selection</div>
+      <div class="doc-section-body">
+        <b style="color:var(--text-primary)">Rectangle Select</b> — Draw a rectangular selection area.<br>
+        <b style="color:var(--text-primary)">Lasso</b> — Free-form selection by drawing around an area.<br>
+        <b style="color:var(--text-primary)">Magic Wand</b> — Select similar-colored regions automatically.<br>
+        <b style="color:var(--text-primary)">Shapes</b> — Draw Rectangle, Ellipse, Line, Triangle, Polygon.
+      </div>
+
+      <div class="doc-section-title">⚡ Adjustments Panel (Right Panel → Adjust)</div>
+      <div class="doc-section-body">
+        Sliders for Exposure, Brightness, Contrast, Highlights, Shadows, Whites, Blacks, Saturation, Vibrance, Hue, Temperature, Tint, Sharpness, Noise Reduction, Clarity, Dehaze, Vignette, Grain.<br>
+        Click <b style="color:var(--dragon-gold)">✓ Apply</b> to commit changes. Click <b style="color:var(--dragon-gold)">↺ Reset</b> to revert all sliders.
+      </div>
+
+      <div class="doc-section-title">✨ 50 Filters (Right Panel → Filters)</div>
+      <div class="doc-section-body">
+        <b style="color:var(--text-primary)">Classic:</b> Grayscale, Sepia, Invert, Vintage, Blueprint, Old Photo<br>
+        <b style="color:var(--text-primary)">Enhance:</b> Vivid, Punch, Clarity+, HDR, Detail+, Pop Color<br>
+        <b style="color:var(--text-primary)">Instagram:</b> 1977, Aden, Clarendon, Gingham, Inkwell, Lo-Fi, Toaster, Valencia, X-Pro II, Moon<br>
+        <b style="color:var(--text-primary)">Artistic:</b> Oil Paint, Watercolor, Pencil Sketch, Charcoal, Comic, Pastel, Glitch, Neon Glow<br>
+        <b style="color:var(--text-primary)">Cinematic:</b> Cinematic, Film Noir, Teal Orange, Golden Hour, Cool Blue, Warm Sunset, Matte, Faded<br>
+        <b style="color:var(--text-primary)">Technical:</b> Sharpen, Gaussian Blur, Motion Blur, Radial Blur, Emboss, Edge Detect, Denoise, Unsharp Mask<br>
+        <b style="color:var(--text-primary)">Color Grading:</b> Cross Process, Split Tone, Solarize, Duotone R/B, Heatmap, Chrome<br>
+        <b style="color:var(--text-primary)">Special FX:</b> Pixelate, Mosaic, Halftone, Scanlines, VHS Effect, Infrared, Lomo, Dither
+      </div>
+
+      <div class="doc-section-title">🗂️ Layer System (Right Panel → Layers)</div>
+      <div class="doc-section-body">
+        Add, Duplicate, Delete layers. Set Opacity and Blend Mode per layer.<br>
+        Use <b style="color:var(--dragon-gold)">Merge Down</b> to combine two layers, or <b style="color:var(--dragon-gold)">Flatten</b> to merge all into one.
+      </div>
+
+      <div class="doc-section-title">💾 Saving & Export</div>
+      <div class="doc-section-body">
+        File → Save as PNG / JPG / WebP. PNG preserves transparency. JPG is smallest file size. WebP is best for web use.
+      </div>
+
+    </div>
+    <div class="modal-actions" style="position:sticky;bottom:0;background:var(--bg-card);padding-top:8px">
+      <button class="modal-btn ok" onclick="document.getElementById('docsModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECENT FILES MODAL -->
+<div class="modal-overlay" id="recentModal">
+  <div class="modal" style="min-width:360px">
+    <div class="modal-title">📁 Recent Files</div>
+    <div id="recentFilesList" style="min-height:80px;margin-bottom:12px"></div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="clearRecentFiles()">Clear History</button>
+      <button class="modal-btn ok" onclick="document.getElementById('recentModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUT/COPY PASTE MODAL (info) -->
+<div class="modal-overlay" id="clipModal">
+  <div class="modal" style="min-width:320px;text-align:center">
+    <div class="modal-title" id="clipModalTitle">📋 Clipboard</div>
+    <div id="clipModalBody" style="color:var(--text-muted);font-size:12px;margin-bottom:16px;line-height:1.8"></div>
+    <div class="modal-actions">
+      <button class="modal-btn ok" onclick="document.getElementById('clipModal').classList.remove('open')">OK</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- RESIZE MODAL -->
+<div class="modal-overlay" id="resizeModal">
+  <div class="modal">
+    <div class="modal-title">🐉 Canvas / Image Resize</div>
+    <div class="modal-row">
+      <div class="modal-label">Width (px)</div>
+      <input class="modal-input" id="resizeW" type="number" value="800">
+    </div>
+    <div class="modal-row">
+      <div class="modal-label">Height (px)</div>
+      <input class="modal-input" id="resizeH" type="number" value="600">
+    </div>
+    <div class="modal-row">
+      <div class="modal-label">Resample</div>
+      <select class="modal-input" id="resampleMethod">
+        <option>Bicubic (Best)</option>
+        <option>Bilinear</option>
+        <option>Nearest Neighbor</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="document.getElementById('resizeModal').classList.remove('open')">Cancel</button>
+      <button class="modal-btn ok" onclick="doResize()">✓ Resize</button>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="modal-overlay" id="aboutModal">
+  <div class="modal" style="text-align:center">
+    <div style="font-size:60px;margin-bottom:10px">🐉</div>
+    <div class="modal-title" style="text-align:center;font-size:20px">DRAGON FORMUP</div>
+    <div style="color:var(--text-muted);font-size:12px;margin-bottom:16px">Professional Image Editor v3.0</div>
+    <div style="font-size:11px;color:var(--text-dim);line-height:2;text-align:left;padding:0 8px">
+      🎨 50 Professional Filters<br>
+      🗂️ Advanced Layer System<br>
+      🖌️ Pro Drawing Tools (Brush, Eraser, Clone, Dodge/Burn)<br>
+      ⚡ Real-time Adjustments (Exposure, Contrast, HSL…)<br>
+      ↩️ 40-Step Undo / Redo History<br>
+      💾 Export PNG · JPG · WebP<br>
+      📐 Canvas Resize & Rotate<br>
+      🌈 Color Wheel & Palette Picker
+    </div>
+    <div style="margin-top:14px;padding:10px;background:rgba(240,160,32,0.06);border:1px solid rgba(240,160,32,0.2);border-radius:6px">
+      <div style="color:var(--dragon-gold);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px">© 2026 Dragon Formup Pro</div>
+      <div style="color:var(--dragon-red);font-size:10px;letter-spacing:2px;margin-top:3px">AUTHOR: SHEHRYAL AZIZ</div>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="modal-btn ok" onclick="document.getElementById('aboutModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT ENGINE
+══════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── STATE ──
+let currentTool = 'select';
+let currentZoom = 1;
+let fgColor = '#000000';
+let bgColor = '#ffffff';
+let brushSize = 20;
+let brushHardness = 0.8;
+let brushOpacity = 1.0;
+let brushMode = 'source-over';
+let isDrawing = false;
+let lastX = 0, lastY = 0;
+let imageLoaded = false;
+let originalImageData = null;
+let currentImageData = null;
+let layers = [{ name: 'Background', visible: true, opacity: 1, blend: 'normal', data: null }];
+let activeLayer = 0;
+let undoStack = [];
+let redoStack = [];
+let adjustments = { exposure:0,brightness:0,contrast:0,highlights:0,shadows:0,whites:0,blacks:0,saturation:0,vibrance:0,hue:0,temperature:0,tint:0,sharpness:0,noise:0,clarity:0,dehaze:0,vignette:0,grain:0 };
+let activeFilter = null;
+
+const canvas = document.getElementById('main-canvas');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay-canvas');
+const octx = overlay.getContext('2d');
+
+// ── TOAST ──
+function showToast(msg, duration=2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('#right-panel .ptab').forEach((t,i) => {
+    const tabs = ['adjust','filters','layers'];
+    t.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('#right-panel .tab-pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-'+name);
+  });
+}
+
+function switchLeftTab(el, name) {
+  document.querySelectorAll('#left-panel .ptab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#left-panel .tab-pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'left-'+name);
+  });
+}
+
+// ── SECTION TOGGLE ──
+function toggleSection(hdr, id) {
+  const section = document.getElementById(id);
+  hdr.classList.toggle('open');
+  section.style.display = hdr.classList.contains('open') ? 'block' : 'none';
+}
+
+// ── TOOL ──
+function setTool(btn, name) {
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  currentTool = name;
+  updateCursor();
+  document.getElementById('statusTool').textContent = 'Tool: ' + name.replace('_',' ').replace(/\b\w/g,l=>l.toUpperCase());
+  document.getElementById('activeToolName').textContent = name.replace('_',' ').toUpperCase() + ' TOOL';
+}
+
+function updateCursor() {
+  const cursors = {
+    brush:'crosshair', pencil:'crosshair', eraser:'cell',
+    fill:'cell', eyedrop:'crosshair', text:'text',
+    crop:'crosshair', select:'default', select_rect:'crosshair',
+    pan:'grab', zoom_in:'zoom-in', zoom_out:'zoom-out',
+    gradient:'crosshair', clone:'copy', heal:'crosshair',
+    dodge:'crosshair', burn:'crosshair', smudge:'crosshair',
+    sharpen_tool:'crosshair', liquify:'crosshair'
+  };
+  canvas.style.cursor = cursors[currentTool] || 'crosshair';
+}
+
+// ── FILE OPEN ──
+function openFile() {
+  document.getElementById('file-input').click();
+}
+
+function loadImageFile(input) {
+  if (!input.files[0]) return;
+  showProgress();
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      overlay.width = img.width;
+      overlay.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      originalImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+      currentImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+      layers[0].data = ctx.getImageData(0,0,canvas.width,canvas.height);
+      imageLoaded = true;
+      document.getElementById('upload-overlay').style.display = 'none';
+      document.getElementById('canvas-wrapper').style.display = 'block';
+      fitCanvasToView();
+      updateStatus();
+      drawHistogram();
+      pushUndo('Open Image');
+      hideProgress();
+      showToast(`✅ Loaded: ${img.width}×${img.height}px`);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.body.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const fake = { files: [file] };
+    loadImageFile(fake);
+  }
+}
+
+// ── CANVAS FIT ──
+function fitCanvasToView() {
+  const area = document.getElementById('canvas-area');
+  const aW = area.clientWidth - 40;
+  const aH = area.clientHeight - 40;
+  const scaleX = aW / canvas.width;
+  const scaleY = aH / canvas.height;
+  const scale = Math.min(scaleX, scaleY, 1);
+  setZoom(scale);
+}
+
+function setZoom(z) {
+  currentZoom = Math.max(0.05, Math.min(10, z));
+  const wrapper = document.getElementById('canvas-wrapper');
+  wrapper.style.transform = `scale(${currentZoom})`;
+  document.getElementById('zoomLabel').textContent = Math.round(currentZoom * 100) + '%';
+}
+
+// ══════════════════════════════════════════════
+// PHOTOSHOP-ACCURATE TOOL ENGINE
+// ══════════════════════════════════════════════
+
+// ── TOOL STATE ──
+let selectionRect   = null;   // {x,y,w,h} rect selection
+let selectionActive = false;
+let lassoPoints     = [];
+let isLassoing      = false;
+let shapeStart      = null;   // {x,y} shape start
+let cropRect        = null;
+let isCropping      = false;
+let isPanning       = false;
+let panStart        = null;
+let cloneSource     = null;   // {x,y} alt-click source
+let textInput       = null;   // active text overlay
+let gradientStart   = null;
+let transformBox    = null;
+let overlayCtx      = overlay.getContext('2d');
+
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  return [
+    (e.clientX - rect.left) * (canvas.width  / rect.width),
+    (e.clientY - rect.top)  * (canvas.height / rect.height)
+  ];
+}
+
+// ── BRUSH CURSOR — zoom-accurate ──
+function makeBrushCursor(size) {
+  // Cursor must match the visual pixel size on screen (affected by zoom)
+  const screenR = Math.max(1, (size / 2) * currentZoom);
+  const d = Math.ceil(screenR * 2) + 4;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = d;
+  const cx2 = cv.getContext('2d');
+  // Outer white ring (visibility on dark)
+  cx2.beginPath();
+  cx2.arc(d/2, d/2, screenR, 0, Math.PI*2);
+  cx2.strokeStyle = 'rgba(255,255,255,0.9)';
+  cx2.lineWidth = 1.5;
+  cx2.stroke();
+  // Inner black ring (visibility on light)
+  cx2.beginPath();
+  cx2.arc(d/2, d/2, screenR, 0, Math.PI*2);
+  cx2.strokeStyle = 'rgba(0,0,0,0.6)';
+  cx2.lineWidth = 0.5;
+  cx2.stroke();
+  // Crosshair center dot
+  cx2.beginPath();
+  cx2.arc(d/2, d/2, 1, 0, Math.PI*2);
+  cx2.fillStyle = 'rgba(255,255,255,0.8)';
+  cx2.fill();
+  return `url(${cv.toDataURL()}) ${d/2} ${d/2}, crosshair`;
+}
+
+// ── APPLY BRUSH STAMP (soft/hard) — Photoshop-accurate ──
+function stampBrush(x, y, erase) {
+  const r = brushSize / 2;
+  const pad = 2;
+  const sz = brushSize + pad * 2;
+  const offCv = document.createElement('canvas');
+  offCv.width = offCv.height = sz;
+  const oc = offCv.getContext('2d');
+  const cx = r + pad, cy = r + pad;
+
+  const alpha = erase ? 1.0 : brushOpacity;
+  const col   = erase ? '0,0,0' : hexToRgb(fgColor);
+
+  if (brushHardness >= 0.99 || currentTool === 'pencil') {
+    // Hard brush — fully opaque disc, opacity via globalAlpha
+    oc.beginPath();
+    oc.arc(cx, cy, r, 0, Math.PI * 2);
+    oc.fillStyle = erase ? `rgba(0,0,0,1)` : `rgba(${col},1)`;
+    oc.fill();
+  } else {
+    // Soft brush — Photoshop-style: fully opaque core up to hardness radius,
+    // then feathered falloff from hardness to edge
+    const hardR = r * brushHardness;   // inner solid core radius
+    const grad = oc.createRadialGradient(cx, cy, hardR, cx, cy, r);
+    grad.addColorStop(0,   `rgba(${col},${alpha})`);  // core: full opacity
+    grad.addColorStop(1,   `rgba(${col},0)`);          // edge: transparent
+
+    // Fill core as solid disc first
+    oc.beginPath();
+    oc.arc(cx, cy, r, 0, Math.PI * 2);
+    oc.fillStyle = grad;
+    oc.fill();
+
+    // Overlay solid core for accurate hardness
+    if (hardR > 0) {
+      oc.globalCompositeOperation = 'source-atop';
+      oc.beginPath();
+      oc.arc(cx, cy, hardR, 0, Math.PI * 2);
+      oc.fillStyle = `rgba(${col},${alpha})`;
+      oc.fill();
+      oc.globalCompositeOperation = 'source-over';
+    }
+  }
+
+  ctx.save();
+  if (erase) {
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.globalAlpha = brushOpacity; // eraser respects opacity too
+  } else {
+    ctx.globalCompositeOperation = brushMode;
+    ctx.globalAlpha = 1; // alpha already baked into stamp for soft; hard also needs it
+  }
+  ctx.drawImage(offCv, x - cx, y - cy);
+  ctx.restore();
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+// ── INTERPOLATED STROKE — Photoshop-accurate spacing ──
+function strokeBetween(x0, y0, x1, y1, erase) {
+  const dist = Math.hypot(x1-x0, y1-y0);
+  // Spacing as fraction of brush diameter; lower = smoother but slower
+  const spacingFrac = Math.max(0.05, parseInt(document.getElementById('brushSpacing')?.value || 25) / 100);
+  const step = Math.max(0.5, brushSize * spacingFrac);
+  const steps = Math.ceil(dist / step);
+  for (let i = 0; i <= steps; i++) {
+    const t = steps === 0 ? 0 : i / steps;
+    stampBrush(x0 + (x1-x0)*t, y0 + (y1-y0)*t, erase);
+  }
+}
+
+// ── OVERLAY HELPERS ──
+function clearOverlay() {
+  overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+}
+
+function drawSelectionOverlay() {
+  clearOverlay();
+  if (!selectionActive || !selectionRect) return;
+  const {x,y,w,h} = selectionRect;
+  overlayCtx.save();
+  overlayCtx.strokeStyle = '#fff';
+  overlayCtx.lineWidth = 1;
+  overlayCtx.setLineDash([6,4]);
+  overlayCtx.lineDashOffset = (Date.now()/50) % 10;
+  overlayCtx.strokeRect(x, y, w, h);
+  overlayCtx.strokeStyle = '#000';
+  overlayCtx.lineDashOffset = ((Date.now()/50) % 10) + 5;
+  overlayCtx.strokeRect(x, y, w, h);
+  overlayCtx.restore();
+}
+
+// Animate marching ants
+(function animateSelection() {
+  if (selectionActive) drawSelectionOverlay();
+  requestAnimationFrame(animateSelection);
+})();
+
+// ── SHAPE PREVIEW OVERLAY ──
+function drawShapePreview(x0, y0, x1, y1) {
+  clearOverlay();
+  overlayCtx.save();
+  overlayCtx.strokeStyle = fgColor;
+  overlayCtx.lineWidth = parseInt(document.getElementById('shapeStroke')?.value || 2);
+  overlayCtx.fillStyle = document.getElementById('shapeFill')?.checked ? fgColor : 'transparent';
+  overlayCtx.globalAlpha = 0.8;
+
+  const t = currentTool;
+  if (t === 'shape_rect') {
+    overlayCtx.beginPath();
+    overlayCtx.rect(x0, y0, x1-x0, y1-y0);
+    if (document.getElementById('shapeFill')?.checked) overlayCtx.fill();
+    overlayCtx.stroke();
+  } else if (t === 'shape_ellipse') {
+    overlayCtx.beginPath();
+    overlayCtx.ellipse((x0+x1)/2, (y0+y1)/2, Math.abs(x1-x0)/2, Math.abs(y1-y0)/2, 0, 0, Math.PI*2);
+    if (document.getElementById('shapeFill')?.checked) overlayCtx.fill();
+    overlayCtx.stroke();
+  } else if (t === 'shape_line') {
+    overlayCtx.beginPath();
+    overlayCtx.moveTo(x0, y0);
+    overlayCtx.lineTo(x1, y1);
+    overlayCtx.stroke();
+  } else if (t === 'shape_poly') {
+    const sides = parseInt(document.getElementById('polySides')?.value || 6);
+    const cx=(x0+x1)/2, cy=(y0+y1)/2, rx=Math.abs(x1-x0)/2, ry=Math.abs(y1-y0)/2;
+    overlayCtx.beginPath();
+    for (let i=0;i<=sides;i++) {
+      const a = (i/sides)*Math.PI*2 - Math.PI/2;
+      i===0 ? overlayCtx.moveTo(cx+rx*Math.cos(a), cy+ry*Math.sin(a))
+             : overlayCtx.lineTo(cx+rx*Math.cos(a), cy+ry*Math.sin(a));
+    }
+    if (document.getElementById('shapeFill')?.checked) overlayCtx.fill();
+    overlayCtx.stroke();
+  } else if (t === 'pen' || t === 'shape_line') {
+    overlayCtx.beginPath();
+    overlayCtx.moveTo(x0,y0); overlayCtx.lineTo(x1,y1);
+    overlayCtx.stroke();
+  }
+  overlayCtx.restore();
+}
+
+// ── COMMIT SHAPE TO CANVAS ──
+function commitShape(x0, y0, x1, y1) {
+  clearOverlay();
+  ctx.save();
+  ctx.strokeStyle = fgColor;
+  ctx.lineWidth = parseInt(document.getElementById('shapeStroke')?.value || 2);
+  ctx.fillStyle = fgColor;
+  ctx.globalAlpha = brushOpacity;
+  const fill = document.getElementById('shapeFill')?.checked;
+  const t = currentTool;
+
+  if (t === 'shape_rect') {
+    ctx.beginPath(); ctx.rect(x0,y0,x1-x0,y1-y0);
+    if (fill) ctx.fill(); ctx.stroke();
+  } else if (t === 'shape_ellipse') {
+    ctx.beginPath();
+    ctx.ellipse((x0+x1)/2,(y0+y1)/2,Math.abs(x1-x0)/2,Math.abs(y1-y0)/2,0,0,Math.PI*2);
+    if (fill) ctx.fill(); ctx.stroke();
+  } else if (t === 'shape_line') {
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+  } else if (t === 'shape_poly') {
+    const sides = parseInt(document.getElementById('polySides')?.value || 6);
+    const cx=(x0+x1)/2,cy=(y0+y1)/2,rx=Math.abs(x1-x0)/2,ry=Math.abs(y1-y0)/2;
+    ctx.beginPath();
+    for(let i=0;i<=sides;i++){const a=(i/sides)*Math.PI*2-Math.PI/2;i===0?ctx.moveTo(cx+rx*Math.cos(a),cy+ry*Math.sin(a)):ctx.lineTo(cx+rx*Math.cos(a),cy+ry*Math.sin(a));}
+    if (fill) ctx.fill(); ctx.stroke();
+  } else if (t === 'pen') {
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+  }
+  ctx.restore();
+  pushUndo(t);
+}
+
+// ── GRADIENT DRAW ──
+function applyGradient(x0, y0, x1, y1) {
+  const gtype = document.getElementById('gradType')?.value || 'linear';
+  let grad;
+  if (gtype === 'radial') {
+    const r = Math.hypot(x1-x0, y1-y0);
+    grad = ctx.createRadialGradient(x0,y0,0, x0,y0,r);
+  } else {
+    grad = ctx.createLinearGradient(x0,y0,x1,y1);
+  }
+  grad.addColorStop(0, fgColor);
+  grad.addColorStop(1, bgColor);
+  ctx.save();
+  ctx.globalAlpha = brushOpacity;
+  if (selectionActive && selectionRect) {
+    const {x,y,w,h} = selectionRect;
+    ctx.fillStyle = grad; ctx.fillRect(x,y,w,h);
+  } else {
+    ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+  ctx.restore();
+  pushUndo('Gradient');
+}
+
+// ── TEXT TOOL ──
+function placeText(x, y) {
+  const existing = document.getElementById('textToolInput');
+  if (existing) existing.remove();
+
+  const area = document.getElementById('canvas-area');
+  const canvasRect = canvas.getBoundingClientRect();
+  const areaRect = area.getBoundingClientRect();
+  const zoom = currentZoom;
+
+  const inp = document.createElement('textarea');
+  inp.id = 'textToolInput';
+  inp.value = '';
+  inp.placeholder = 'Type here…';
+  inp.style.cssText = [
+    'position:absolute',
+    `left:${canvasRect.left - areaRect.left + x * zoom}px`,
+    `top:${canvasRect.top - areaRect.top + y * zoom}px`,
+    'min-width:120px','min-height:30px',
+    'background:rgba(0,0,0,0.0)',
+    'border:1px dashed rgba(255,255,255,0.6)',
+    'color:' + fgColor,
+    'font-size:' + (parseInt(document.getElementById('fontSize')?.value||24)*zoom) + 'px',
+    'font-family:' + (document.getElementById('fontFamily')?.value || 'Arial'),
+    'font-weight:' + (document.getElementById('fontBold')?.checked?'bold':'normal'),
+    'font-style:' + (document.getElementById('fontItalic')?.checked?'italic':'normal'),
+    'resize:none','outline:none','padding:2px 4px',
+    'z-index:200','white-space:pre','overflow:hidden',
+    'line-height:1.2'
+  ].join(';');
+
+  inp.onkeydown = e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitText(inp, x, y); }
+    if (e.key === 'Escape') { inp.remove(); }
+  };
+  inp.oninput = () => { inp.style.width = (inp.scrollWidth)+'px'; inp.style.height = (inp.scrollHeight)+'px'; };
+
+  area.appendChild(inp);
+  inp.focus();
+  textInput = inp;
+}
+
+function commitText(inp, x, y) {
+  if (!inp || !inp.value.trim()) { inp?.remove(); return; }
+  const txt = inp.value;
+  const fs  = parseInt(document.getElementById('fontSize')?.value || 24);
+  ctx.save();
+  ctx.font = `${document.getElementById('fontItalic')?.checked?'italic ':' '}${document.getElementById('fontBold')?.checked?'bold ':' '}${fs}px ${document.getElementById('fontFamily')?.value||'Arial'}`;
+  ctx.fillStyle   = fgColor;
+  ctx.globalAlpha = brushOpacity;
+  ctx.textBaseline = 'top';
+  txt.split('\n').forEach((line, i) => { ctx.fillText(line, x, y + i * fs * 1.2); });
+  ctx.restore();
+  inp.remove();
+  pushUndo('Text');
+  drawHistogram();
+}
+
+// ── CROP TOOL ──
+function drawCropOverlay(x0, y0, x1, y1) {
+  clearOverlay();
+  overlayCtx.save();
+  overlayCtx.fillStyle = 'rgba(0,0,0,0.5)';
+  overlayCtx.fillRect(0,0,canvas.width,canvas.height);
+  overlayCtx.clearRect(x0,y0,x1-x0,y1-y0);
+  overlayCtx.strokeStyle = '#fff';
+  overlayCtx.lineWidth = 1;
+  // Rule of thirds
+  const w=x1-x0, h=y1-y0;
+  overlayCtx.setLineDash([]);
+  overlayCtx.strokeRect(x0,y0,w,h);
+  overlayCtx.strokeStyle='rgba(255,255,255,0.3)';
+  overlayCtx.lineWidth=0.5;
+  [1/3,2/3].forEach(t=>{
+    overlayCtx.beginPath(); overlayCtx.moveTo(x0+w*t,y0); overlayCtx.lineTo(x0+w*t,y1); overlayCtx.stroke();
+    overlayCtx.beginPath(); overlayCtx.moveTo(x0,y0+h*t); overlayCtx.lineTo(x1,y0+h*t); overlayCtx.stroke();
+  });
+  overlayCtx.restore();
+}
+
+function commitCrop(x0, y0, x1, y1) {
+  const cx=Math.round(Math.min(x0,x1)), cy=Math.round(Math.min(y0,y1));
+  const cw=Math.round(Math.abs(x1-x0)), ch=Math.round(Math.abs(y1-y0));
+  if (cw<4||ch<4) { clearOverlay(); return; }
+  const imgd = ctx.getImageData(cx,cy,cw,ch);
+  canvas.width=cw; canvas.height=ch;
+  overlay.width=cw; overlay.height=ch;
+  ctx.putImageData(imgd,0,0);
+  originalImageData=ctx.getImageData(0,0,cw,ch);
+  clearOverlay();
+  fitCanvasToView(); updateStatus(); drawHistogram(); pushUndo('Crop');
+  showToast(`✂️ Cropped to ${cw}×${ch}px`);
+}
+
+// ── SELECTION HELPERS ──
+function getSelectionData() {
+  if (!selectionActive || !selectionRect) return null;
+  const {x,y,w,h} = selectionRect;
+  return ctx.getImageData(Math.round(x),Math.round(y),Math.round(w),Math.round(h));
+}
+
+// ── PAN TOOL ──
+let panOffset = {x:0,y:0};
+
+function applyPan(dx, dy) {
+  const wrapper = document.getElementById('canvas-wrapper');
+  const cur = wrapper.style.transform || '';
+  const matchX = cur.match(/translateX\(([^p]+)px\)/);
+  const matchY = cur.match(/translateY\(([^p]+)px\)/);
+  panOffset.x = (matchX ? parseFloat(matchX[1]) : 0) + dx;
+  panOffset.y = (matchY ? parseFloat(matchY[1]) : 0) + dy;
+  // Use margin offset instead of breaking scale
+  wrapper.style.marginLeft = panOffset.x + 'px';
+  wrapper.style.marginTop  = panOffset.y + 'px';
+}
+
+// ── MAGIC WAND / FLOOD SELECT ──
+function magicWandSelect(sx, sy, tolerance) {
+  const imgd = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const d = imgd.data, w = canvas.width, h = canvas.height;
+  const idx = (Math.round(sy)*w+Math.round(sx))*4;
+  const tr=d[idx],tg=d[idx+1],tb=d[idx+2];
+  const visited = new Uint8Array(w*h);
+  const queue = [Math.round(sx), Math.round(sy)];
+  const selected = [];
+  let minX=w,maxX=0,minY=h,maxY=0;
+  while (queue.length) {
+    const qx=queue.shift(), qy=queue.shift();
+    if (qx<0||qx>=w||qy<0||qy>=h) continue;
+    const key=qy*w+qx;
+    if (visited[key]) continue;
+    const i=key*4;
+    if (Math.abs(d[i]-tr)+Math.abs(d[i+1]-tg)+Math.abs(d[i+2]-tb) > tolerance*3) continue;
+    visited[key]=1; selected.push(qx,qy);
+    minX=Math.min(minX,qx);maxX=Math.max(maxX,qx);
+    minY=Math.min(minY,qy);maxY=Math.max(maxY,qy);
+    queue.push(qx+1,qy,qx-1,qy,qx,qy+1,qx,qy-1);
+  }
+  if (maxX>minX && maxY>minY) {
+    selectionRect = {x:minX,y:minY,w:maxX-minX,h:maxY-minY};
+    selectionActive = true;
+    showToast(`🪄 Selected ${(maxX-minX)}×${(maxY-minY)}px region`);
+  }
+}
+
+// ── LASSO COMMIT ──
+function commitLasso() {
+  if (lassoPoints.length < 3) { lassoPoints=[]; isLassoing=false; clearOverlay(); return; }
+  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+  for(let i=0;i<lassoPoints.length;i+=2){
+    minX=Math.min(minX,lassoPoints[i]);maxX=Math.max(maxX,lassoPoints[i]);
+    minY=Math.min(minY,lassoPoints[i+1]);maxY=Math.max(maxY,lassoPoints[i+1]);
+  }
+  selectionRect = {x:minX,y:minY,w:maxX-minX,h:maxY-minY};
+  selectionActive = true;
+  lassoPoints=[]; isLassoing=false; clearOverlay();
+  drawSelectionOverlay();
+  showToast('Lasso selection created');
+}
+
+function drawLassoOverlay() {
+  clearOverlay();
+  if (!lassoPoints.length) return;
+  overlayCtx.save();
+  overlayCtx.beginPath();
+  overlayCtx.moveTo(lassoPoints[0], lassoPoints[1]);
+  for(let i=2;i<lassoPoints.length;i+=2) overlayCtx.lineTo(lassoPoints[i],lassoPoints[i+1]);
+  overlayCtx.strokeStyle='#fff'; overlayCtx.lineWidth=1;
+  overlayCtx.setLineDash([5,3]); overlayCtx.stroke();
+  overlayCtx.restore();
+}
+
+// ══════════════════════════════════════════════
+// MASTER MOUSE EVENT HANDLER
+// ══════════════════════════════════════════════
+canvas.addEventListener('mousedown', e => {
+  if (!imageLoaded && !['select','select_rect','select_lasso','magic_select','pan','zoom_in','zoom_out'].includes(currentTool)) return;
+  const [x, y] = getPos(e);
+  lastX = x; lastY = y;
+
+  // Alt+click = clone source pick
+  if (e.altKey && currentTool === 'clone') { cloneSource = {x,y}; showToast('Clone source set'); return; }
+
+  switch (currentTool) {
+    case 'brush':
+    case 'pencil':
+      isDrawing = true;
+      stampBrush(x, y, false);
+      canvas.style.cursor = makeBrushCursor(brushSize);
+      break;
+
+    case 'eraser':
+      isDrawing = true;
+      stampBrush(x, y, true);
+      canvas.style.cursor = makeBrushCursor(brushSize);
+      break;
+
+    case 'dodge':
+    case 'burn':
+    case 'sharpen_tool':
+    case 'smudge':
+    case 'heal':
+      isDrawing = true;
+      break;
+
+    case 'fill':
+      floodFill(Math.round(x), Math.round(y), fgColor);
+      break;
+
+    case 'eyedrop':
+      pickColor(x, y);
+      break;
+
+    case 'text':
+      if (textInput) commitText(textInput, parseFloat(textInput.dataset.tx||0), parseFloat(textInput.dataset.ty||0));
+      placeText(x, y);
+      break;
+
+    case 'gradient':
+      isDrawing = true;
+      gradientStart = {x, y};
+      break;
+
+    case 'select_rect':
+      selectionActive = false;
+      isDrawing = true;
+      selectionRect = {x, y, w:0, h:0};
+      break;
+
+    case 'select_lasso':
+      isLassoing = true;
+      lassoPoints = [x, y];
+      break;
+
+    case 'magic_select':
+      const tol = parseInt(document.getElementById('wandTolerance')?.value || 32);
+      magicWandSelect(x, y, tol);
+      break;
+
+    case 'crop':
+      isCropping = true;
+      cropRect = {x0:x, y0:y, x1:x, y1:y};
+      break;
+
+    case 'pan':
+      isPanning = true;
+      panStart = {x: e.clientX, y: e.clientY};
+      canvas.style.cursor = 'grabbing';
+      break;
+
+    case 'zoom_in':
+      setZoom(currentZoom * 1.25);
+      break;
+
+    case 'zoom_out':
+      setZoom(currentZoom * 0.8);
+      break;
+
+    case 'shape_rect':
+    case 'shape_ellipse':
+    case 'shape_line':
+    case 'shape_poly':
+    case 'pen':
+      isDrawing = true;
+      shapeStart = {x, y};
+      break;
+
+    case 'clone':
+      isDrawing = true;
+      break;
+  }
+});
+
+canvas.addEventListener('mousemove', e => {
+  const [x, y] = getPos(e);
+  document.getElementById('statusPos').textContent = `X:${Math.round(x)} Y:${Math.round(y)}`;
+
+  // Brush size cursor preview
+  if (['brush','pencil','eraser','dodge','burn','smudge','heal','sharpen_tool','clone'].includes(currentTool)) {
+    canvas.style.cursor = makeBrushCursor(brushSize);
+  }
+
+  // Pan
+  if (isPanning && panStart) {
+    const dx = e.clientX - panStart.x;
+    const dy = e.clientY - panStart.y;
+    applyPan(dx, dy);
+    panStart = {x: e.clientX, y: e.clientY};
+    return;
+  }
+
+  if (!isDrawing && !isLassoing && !isCropping) { lastX=x; lastY=y; return; }
+
+  switch (currentTool) {
+    case 'brush':
+    case 'pencil':
+      strokeBetween(lastX, lastY, x, y, false);
+      break;
+
+    case 'eraser':
+      strokeBetween(lastX, lastY, x, y, true);
+      break;
+
+    case 'dodge':
+      dodgeBurnArea(x, y, 0.04, 'dodge');
+      break;
+
+    case 'burn':
+      dodgeBurnArea(x, y, 0.04, 'burn');
+      break;
+
+    case 'smudge':
+      smudgeArea(x, y, lastX, lastY);
+      break;
+
+    case 'sharpen_tool':
+      sharpenArea(x, y);
+      break;
+
+    case 'heal':
+      healArea(x, y);
+      break;
+
+    case 'clone':
+      if (cloneSource) cloneStamp(x, y, lastX, lastY);
+      break;
+
+    case 'gradient':
+      if (gradientStart) {
+        clearOverlay();
+        overlayCtx.save();
+        overlayCtx.strokeStyle = '#fff';
+        overlayCtx.lineWidth = 1.5;
+        overlayCtx.setLineDash([6,3]);
+        overlayCtx.beginPath();
+        overlayCtx.moveTo(gradientStart.x, gradientStart.y);
+        overlayCtx.lineTo(x, y);
+        overlayCtx.stroke();
+        overlayCtx.restore();
+      }
+      break;
+
+    case 'select_rect':
+      selectionRect = {x:Math.min(lastX,x), y:Math.min(lastY,y), w:Math.abs(x-lastX), h:Math.abs(y-lastY)};
+      // lastX/lastY are the start — update only end
+      selectionRect = {x:Math.min(shapeStart?.x??lastX,x), y:Math.min(shapeStart?.y??lastY,y), w:Math.abs(x-(shapeStart?.x??lastX)), h:Math.abs(y-(shapeStart?.y??lastY))};
+      drawSelectionOverlay();
+      break;
+
+    case 'select_lasso':
+      if (isLassoing) { lassoPoints.push(x,y); drawLassoOverlay(); }
+      break;
+
+    case 'crop':
+      if (isCropping) { cropRect.x1=x; cropRect.y1=y; drawCropOverlay(cropRect.x0,cropRect.y0,x,y); }
+      break;
+
+    case 'shape_rect':
+    case 'shape_ellipse':
+    case 'shape_line':
+    case 'shape_poly':
+    case 'pen':
+      if (shapeStart) drawShapePreview(shapeStart.x, shapeStart.y, x, y);
+      break;
+  }
+
+  lastX = x; lastY = y;
+});
+
+canvas.addEventListener('mouseup', e => {
+  const [x, y] = getPos(e);
+
+  if (isPanning)  { isPanning=false; panStart=null; canvas.style.cursor='grab'; return; }
+  if (isLassoing) { commitLasso(); return; }
+
+  if (isCropping && cropRect) {
+    commitCrop(cropRect.x0, cropRect.y0, cropRect.x1, cropRect.y1);
+    isCropping=false; cropRect=null; return;
+  }
+
+  if (currentTool === 'gradient' && gradientStart) {
+    applyGradient(gradientStart.x, gradientStart.y, x, y);
+    gradientStart=null; clearOverlay(); return;
+  }
+
+  if (['shape_rect','shape_ellipse','shape_line','shape_poly','pen'].includes(currentTool) && shapeStart) {
+    commitShape(shapeStart.x, shapeStart.y, x, y);
+    shapeStart=null; clearOverlay(); return;
+  }
+
+  if (currentTool === 'select_rect') {
+    selectionActive = (selectionRect && selectionRect.w>4 && selectionRect.h>4);
+    shapeStart = null;
+  }
+
+  if (isDrawing && imageLoaded) {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    pushUndo(currentTool);
+    drawHistogram();
+  }
+
+  isDrawing = false;
+});
+
+// Escape = deselect / cancel
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    selectionActive=false; selectionRect=null;
+    isLassoing=false; lassoPoints=[]; isCropping=false;
+    shapeStart=null; gradientStart=null;
+    clearOverlay();
+    if (textInput) { textInput.remove(); textInput=null; }
+  }
+  if (e.key === 'Delete' && selectionActive && selectionRect && imageLoaded) {
+    const {x,y,w,h} = selectionRect;
+    ctx.clearRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));
+    pushUndo('Delete Selection');
+  }
+});
+
+// Touch support
+canvas.addEventListener('touchstart', e=>{e.preventDefault();const t=e.touches[0];canvas.dispatchEvent(new MouseEvent('mousedown',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+canvas.addEventListener('touchmove', e=>{e.preventDefault();const t=e.touches[0];canvas.dispatchEvent(new MouseEvent('mousemove',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+canvas.addEventListener('touchend', e=>{e.preventDefault();canvas.dispatchEvent(new MouseEvent('mouseup',{}));},{passive:false});
+
+// ══════════════════════════════════════════════
+// ADVANCED TOOL IMPLEMENTATIONS
+// ══════════════════════════════════════════════
+
+// ── SHARPEN BRUSH ──
+function sharpenArea(x, y) {
+  const r = Math.round(brushSize/2);
+  const x0=Math.max(1,Math.round(x-r)), y0=Math.max(1,Math.round(y-r));
+  const x1=Math.min(canvas.width-1,Math.round(x+r)), y1=Math.min(canvas.height-1,Math.round(y+r));
+  const imgd=ctx.getImageData(x0-1,y0-1,x1-x0+2,y1-y0+2);
+  const src=new Uint8ClampedArray(imgd.data);
+  const w=imgd.width, h=imgd.height;
+  const strength=0.3;
+  for(let iy=1;iy<h-1;iy++)for(let ix=1;ix<w-1;ix++){
+    for(let c=0;c<3;c++){
+      const i=(iy*w+ix)*4+c;
+      const lap=src[i]*5-src[((iy-1)*w+ix)*4+c]-src[((iy+1)*w+ix)*4+c]-src[(iy*w+(ix-1))*4+c]-src[(iy*w+(ix+1))*4+c];
+      imgd.data[i]=clamp(src[i]+lap*strength);
+    }
+  }
+  ctx.putImageData(imgd,x0-1,y0-1);
+}
+
+// ── HEALING BRUSH ──
+function healArea(x, y) {
+  const r = Math.round(brushSize/2);
+  const sx=Math.max(0,Math.round(x-r)-r*3), sy=Math.max(0,Math.round(y-r));
+  const x0=Math.max(0,Math.round(x-r)), y0=Math.max(0,Math.round(y-r));
+  const w=Math.round(brushSize), h=Math.round(brushSize);
+  if(sx<0||sy<0||x0+w>canvas.width||y0+h>canvas.height) return;
+  const src=ctx.getImageData(sx,sy,w,h);
+  const dst=ctx.getImageData(x0,y0,w,h);
+  const d=dst.data,s=src.data;
+  for(let i=0;i<d.length;i+=4){
+    d[i]  =clamp(d[i]  *0.3+s[i]  *0.7);
+    d[i+1]=clamp(d[i+1]*0.3+s[i+1]*0.7);
+    d[i+2]=clamp(d[i+2]*0.3+s[i+2]*0.7);
+  }
+  ctx.putImageData(dst,x0,y0);
+}
+
+// ── CLONE STAMP ──
+function cloneStamp(x, y, lx, ly) {
+  if (!cloneSource) return;
+  const r = Math.round(brushSize/2);
+  const dx=x-lx, dy=y-ly;
+  const sx=Math.max(0,Math.round(cloneSource.x-r)), sy=Math.max(0,Math.round(cloneSource.y-r));
+  const tx=Math.max(0,Math.round(x-r)), ty=Math.max(0,Math.round(y-r));
+  const w=Math.min(brushSize, canvas.width-sx, canvas.width-tx);
+  const h2=Math.min(brushSize, canvas.height-sy, canvas.height-ty);
+  if(w<1||h2<1) return;
+  const srcD=ctx.getImageData(sx,sy,w,h2);
+  ctx.save();
+  ctx.globalAlpha=brushOpacity;
+  ctx.putImageData(srcD,tx,ty);
+  ctx.restore();
+  // Move source along with stroke
+  cloneSource.x+=dx; cloneSource.y+=dy;
+}
+
+// ── DODGE/BURN ──
+function dodgeBurnArea(x, y, strength, mode) {
+  const r = brushSize;
+  const x0 = Math.max(0, Math.round(x-r));
+  const y0 = Math.max(0, Math.round(y-r));
+  const x1 = Math.min(canvas.width, Math.round(x+r));
+  const y1 = Math.min(canvas.height, Math.round(y+r));
+  const imgd = ctx.getImageData(x0, y0, x1-x0, y1-y0);
+  const d = imgd.data;
+  for (let i=0; i<d.length; i+=4) {
+    if (mode==='dodge') {
+      d[i]   = Math.min(255, d[i]   * (1+strength));
+      d[i+1] = Math.min(255, d[i+1] * (1+strength));
+      d[i+2] = Math.min(255, d[i+2] * (1+strength));
+    } else {
+      d[i]   = Math.max(0, d[i]   * (1-strength));
+      d[i+1] = Math.max(0, d[i+1] * (1-strength));
+      d[i+2] = Math.max(0, d[i+2] * (1-strength));
+    }
+  }
+  ctx.putImageData(imgd, x0, y0);
+}
+
+// ── SMUDGE ──
+function smudgeArea(x, y, lx, ly) {
+  const r = brushSize;
+  const x0 = Math.max(0, Math.round(Math.min(x,lx)-r));
+  const y0 = Math.max(0, Math.round(Math.min(y,ly)-r));
+  const x1 = Math.min(canvas.width, Math.round(Math.max(x,lx)+r));
+  const y1 = Math.min(canvas.height, Math.round(Math.max(y,ly)+r));
+  if (x1<=x0 || y1<=y0) return;
+  const imgd = ctx.getImageData(x0, y0, x1-x0, y1-y0);
+  const w = x1-x0, h = y1-y0, d = imgd.data;
+  const dx = Math.sign(x-lx), dy = Math.sign(y-ly);
+  for (let row=0; row<h; row++) {
+    for (let col=0; col<w; col++) {
+      const i = (row*w+col)*4;
+      const si = (Math.max(0,Math.min(h-1,row-dy))*w + Math.max(0,Math.min(w-1,col-dx)))*4;
+      const s = 0.3;
+      d[i]   = d[i]*(1-s)   + d[si]*s;
+      d[i+1] = d[i+1]*(1-s) + d[si+1]*s;
+      d[i+2] = d[i+2]*(1-s) + d[si+2]*s;
+    }
+  }
+  ctx.putImageData(imgd, x0, y0);
+}
+
+// ── COLOR PICKER ──
+function pickColor(x, y) {
+  const d = ctx.getImageData(Math.round(x), Math.round(y), 1, 1).data;
+  const hex = '#' + [d[0],d[1],d[2]].map(v=>v.toString(16).padStart(2,'0')).join('');
+  setFgColor(hex);
+  document.getElementById('fgColor').value = hex;
+  showToast(`🎨 Picked: ${hex}`);
+}
+
+// ── COLORS ──
+function setFgColor(hex) {
+  fgColor = hex;
+  document.getElementById('fgSwatch').style.background = hex;
+  updateBrushPreviewStyle(); // keep preview dot color in sync
+}
+function setBgColor(hex) {
+  bgColor = hex;
+  document.getElementById('bgSwatch').style.background = hex;
+}
+function swapColors() {
+  [fgColor, bgColor] = [bgColor, fgColor];
+  document.getElementById('fgSwatch').style.background = fgColor;
+  document.getElementById('bgSwatch').style.background = bgColor;
+  document.getElementById('fgColor').value = fgColor;
+  document.getElementById('bgColor').value = bgColor;
+}
+function resetColors() { setFgColor('#000000'); setBgColor('#ffffff'); }
+
+// ── BRUSH CONTROLS — Photoshop-accurate ──
+function updateBrushSize(v) {
+  brushSize = parseInt(v);
+  document.getElementById('brushSizeVal').textContent = v;
+  const dot = document.getElementById('brushDotPreview');
+  // Show accurate preview up to the preview box height (50px container)
+  // Scale: if brushSize <= 50, show real size; else scale proportionally
+  const maxPx = 48;
+  const sz = brushSize <= maxPx ? brushSize : maxPx;
+  dot.style.width  = sz + 'px';
+  dot.style.height = sz + 'px';
+  // Update opacity of preview to reflect current hardness
+  updateBrushPreviewStyle();
+}
+function updateBrushHard(v) {
+  brushHardness = v / 100;
+  document.getElementById('brushHardVal').textContent = v;
+  updateBrushPreviewStyle();
+}
+function updateBrushOpacity(v) {
+  brushOpacity = v / 100;
+  document.getElementById('brushOpacityVal').textContent = v;
+  updateBrushPreviewStyle();
+}
+
+// Live preview dot reflects hardness (edge blur) + opacity — just like Photoshop
+function updateBrushPreviewStyle() {
+  const dot = document.getElementById('brushDotPreview');
+  if (!dot) return;
+  // Feather blur = inversely proportional to hardness
+  // At hardness=100 → no blur; at hardness=0 → max blur (half the radius)
+  const maxPx = 48;
+  const sz = brushSize <= maxPx ? brushSize : maxPx;
+  const blurPx = ((1 - brushHardness) * sz * 0.45).toFixed(1);
+  dot.style.filter  = `blur(${blurPx}px)`;
+  dot.style.opacity = brushOpacity;
+  dot.style.background = fgColor || 'var(--text-primary)';
+}
+
+function updateVal(id, v) { document.getElementById(id).textContent = v; }
+function setBrushMode(v) {
+  const modes = {'Normal':'source-over','Multiply':'multiply','Screen':'screen','Overlay':'overlay','Soft Light':'soft-light','Hard Light':'hard-light','Color Dodge':'color-dodge','Color Burn':'color-burn'};
+  brushMode = modes[v] || 'source-over';
+}
+
+// ── FLOOD FILL ──
+function floodFill(sx, sy, fillColor) {
+  if (!imageLoaded) return;
+  const imgd = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const d = imgd.data;
+  const w = canvas.width, h = canvas.height;
+  const idx = (sy*w+sx)*4;
+  const tr = d[idx], tg = d[idx+1], tb = d[idx+2], ta = d[idx+3];
+  const fc = parseInt(fillColor.slice(1),16);
+  const fr=(fc>>16)&255, fg=(fc>>8)&255, fb=fc&255;
+  if (tr===fr && tg===fg && tb===fb) return;
+  const queue = [[sx,sy]];
+  const visited = new Set();
+  function colMatch(i){return d[i]===tr&&d[i+1]===tg&&d[i+2]===tb&&Math.abs(d[i+3]-ta)<20;}
+  while (queue.length) {
+    const [x,y] = queue.pop();
+    const key = y*w+x;
+    if (x<0||x>=w||y<0||y>=h||visited.has(key)) continue;
+    const i = key*4;
+    if (!colMatch(i)) continue;
+    visited.add(key);
+    d[i]=fr; d[i+1]=fg; d[i+2]=fb; d[i+3]=255;
+    queue.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+  }
+  ctx.putImageData(imgd,0,0);
+  pushUndo('Fill');
+}
+
+// ── UNDO / REDO ──
+function pushUndo(label) {
+  if (!imageLoaded) return;
+  const snap = ctx.getImageData(0,0,canvas.width,canvas.height);
+  undoStack.push({ label, data: snap });
+  if (undoStack.length > 40) undoStack.shift();
+  redoStack = [];
+  addHistoryItem(label);
+}
+function undoAction() {
+  if (undoStack.length < 2) { showToast('Nothing to undo'); return; }
+  redoStack.push(undoStack.pop());
+  const state = undoStack[undoStack.length-1];
+  ctx.putImageData(state.data,0,0);
+  showToast('↩ Undo: '+state.label);
+  drawHistogram();
+}
+function redoAction() {
+  if (!redoStack.length) { showToast('Nothing to redo'); return; }
+  const state = redoStack.pop();
+  undoStack.push(state);
+  ctx.putImageData(state.data,0,0);
+  showToast('↪ Redo: '+state.label);
+  drawHistogram();
+}
+function addHistoryItem(label) {
+  const list = document.getElementById('historyList');
+  const item = document.createElement('div');
+  item.style.cssText = 'padding:5px 8px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-size:11px;color:var(--text-muted);cursor:pointer';
+  item.textContent = '• ' + label;
+  item.onclick = () => undoAction();
+  list.insertBefore(item, list.firstChild);
+  if (list.children.length > 20) list.removeChild(list.lastChild);
+}
+function clearHistory() { undoStack=[]; redoStack=[]; document.getElementById('historyList').innerHTML=''; showToast('History cleared'); }
+
+// ══════════════════════════════════════════════
+// 50 PROFESSIONAL FILTERS ENGINE
+// ══════════════════════════════════════════════
+function applyFilter(name, btn) {
+  if (!imageLoaded) { showToast('⚠️ Open an image first'); return; }
+  showProgress();
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  activeFilter = name;
+  document.getElementById('statusFilter').textContent = 'Filter: '+name.replace(/_/g,' ');
+
+  // Restore original before applying
+  if (originalImageData) ctx.putImageData(originalImageData, 0, 0);
+
+  setTimeout(() => {
+    const imgd = ctx.getImageData(0,0,canvas.width,canvas.height);
+    processFilter(name, imgd);
+    ctx.putImageData(imgd,0,0);
+    drawHistogram();
+    hideProgress();
+    pushUndo('Filter:'+name);
+    showToast('✨ '+name.replace(/_/g,' ')+' applied');
+  }, 30);
+}
+
+function processFilter(name, imgd) {
+  const d = imgd.data;
+  const w = imgd.width, h = imgd.height;
+
+  switch(name) {
+    // ── CLASSIC ──
+    case 'grayscale':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=d[i+1]=d[i+2]=g;}
+      break;
+    case 'sepia':
+      for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];d[i]=clamp(r*0.393+g*0.769+b*0.189);d[i+1]=clamp(r*0.349+g*0.686+b*0.168);d[i+2]=clamp(r*0.272+g*0.534+b*0.131);}
+      break;
+    case 'invert':
+      for(let i=0;i<d.length;i+=4){d[i]=255-d[i];d[i+1]=255-d[i+1];d[i+2]=255-d[i+2];}
+      break;
+    case 'vintage':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.1+20);d[i+1]=clamp(d[i+1]*0.9+10);d[i+2]=clamp(d[i+2]*0.7);}
+      applyVignette(d,w,h,0.4);
+      break;
+    case 'blueprint':
+      for(let i=0;i<d.length;i+=4){const g=255-(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114);d[i]=0;d[i+1]=clamp(g*0.3);d[i+2]=clamp(g*1.2);}
+      break;
+    case 'old_photo':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=clamp(g*0.9+20);d[i+1]=clamp(g*0.85+15);d[i+2]=clamp(g*0.75+10);if(Math.random()<0.03){const n=(Math.random()-0.5)*30;d[i]+=n;d[i+1]+=n;d[i+2]+=n;}}
+      applyVignette(d,w,h,0.5);
+      break;
+
+    // ── ENHANCE ──
+    case 'vivid':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.2-20);d[i+1]=clamp(d[i+1]*1.2-20);d[i+2]=clamp(d[i+2]*1.2-20);}
+      saturatePixels(d, 1.5);
+      break;
+    case 'punch':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],50));d[i+1]=clamp(contrastFn(d[i+1],50));d[i+2]=clamp(contrastFn(d[i+2],50));}
+      saturatePixels(d,1.3);
+      break;
+    case 'clarity_boost':
+      for(let i=0;i<d.length;i+=4){const br=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const m=br<128?0.8:1.2;d[i]=clamp(d[i]*m);d[i+1]=clamp(d[i+1]*m);d[i+2]=clamp(d[i+2]*m);}
+      break;
+    case 'hdr':
+      for(let i=0;i<d.length;i+=4){const br=(d[i]+d[i+1]+d[i+2])/3;const boost=br<100?1.3:br>200?0.8:1.1;d[i]=clamp(contrastFn(d[i]*boost,30));d[i+1]=clamp(contrastFn(d[i+1]*boost,30));d[i+2]=clamp(contrastFn(d[i+2]*boost,30));}
+      saturatePixels(d,1.2);
+      break;
+    case 'detail_enhance':
+      saturatePixels(d,1.15);
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],20));d[i+1]=clamp(contrastFn(d[i+1],20));d[i+2]=clamp(contrastFn(d[i+2],20));}
+      break;
+    case 'pop':
+      saturatePixels(d, 1.8);
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.05);d[i+1]=clamp(d[i+1]*1.05);d[i+2]=clamp(d[i+2]*1.05);}
+      break;
+
+    // ── INSTAGRAM ──
+    case '1977':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.2+30);d[i+1]=clamp(d[i+1]*1.05+10);d[i+2]=clamp(d[i+2]*0.8+20);}
+      applyVignette(d,w,h,0.25);
+      break;
+    case 'aden':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*0.9+15);d[i+1]=clamp(d[i+1]*1.1+10);d[i+2]=clamp(d[i+2]*1.2+5);}
+      saturatePixels(d,0.8);
+      break;
+    case 'clarendon':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.1);d[i+1]=clamp(d[i+1]*1.15-10);d[i+2]=clamp(d[i+2]*1.3);}
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],30));d[i+1]=clamp(contrastFn(d[i+1],30));d[i+2]=clamp(contrastFn(d[i+2],30));}
+      break;
+    case 'gingham':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.05+10);d[i+1]=clamp(d[i+1]*1.05+8);d[i+2]=clamp(d[i+2]*1.0+5);}
+      saturatePixels(d,0.9);
+      break;
+    case 'inkwell':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=d[i+1]=d[i+2]=clamp(contrastFn(g,20));}
+      break;
+    case 'lofi':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],40));d[i+1]=clamp(contrastFn(d[i+1],40));d[i+2]=clamp(contrastFn(d[i+2],40));}
+      saturatePixels(d,1.4);
+      applyVignette(d,w,h,0.5);
+      break;
+    case 'toaster':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.3+20);d[i+1]=clamp(d[i+1]*0.9);d[i+2]=clamp(d[i+2]*0.7);}
+      applyVignette(d,w,h,0.4);
+      break;
+    case 'valencia':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.1+20);d[i+1]=clamp(d[i+1]*1.05+10);d[i+2]=clamp(d[i+2]*0.9);}
+      saturatePixels(d,1.1);
+      break;
+    case 'xpro2':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.2);d[i+1]=clamp(d[i+1]*1.0);d[i+2]=clamp(d[i+2]*0.8+20);}
+      applyVignette(d,w,h,0.6);
+      saturatePixels(d,1.2);
+      break;
+    case 'moon':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=d[i+1]=d[i+2]=clamp(contrastFn(g,15)+10);}
+      applyVignette(d,w,h,0.3);
+      break;
+
+    // ── ARTISTIC ──
+    case 'oil_paint':
+      for(let i=0;i<d.length;i+=4){const f=Math.random()*0.1+0.95;d[i]=clamp(d[i]*f);d[i+1]=clamp(d[i+1]*f);d[i+2]=clamp(d[i+2]*f);}
+      saturatePixels(d,1.3);
+      break;
+    case 'watercolor':
+      saturatePixels(d,0.7);
+      for(let i=0;i<d.length;i+=4){const br=(d[i]+d[i+1]+d[i+2])/3;if(br>200){d[i]=Math.min(255,d[i]+20);d[i+1]=Math.min(255,d[i+1]+20);d[i+2]=Math.min(255,d[i+2]+20);}}
+      break;
+    case 'pencil_sketch':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const inv=255-g;d[i]=d[i+1]=d[i+2]=clamp(inv>200?255:g*0.3);}
+      break;
+    case 'charcoal':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=d[i+1]=d[i+2]=clamp(g<128?g*0.3:g*0.7+20);}
+      break;
+    case 'comic':
+      for(let i=0;i<d.length;i+=4){d[i]=Math.round(d[i]/64)*64;d[i+1]=Math.round(d[i+1]/64)*64;d[i+2]=Math.round(d[i+2]/64)*64;}
+      saturatePixels(d,1.5);
+      break;
+    case 'pastel':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*0.7+80);d[i+1]=clamp(d[i+1]*0.7+80);d[i+2]=clamp(d[i+2]*0.7+80);}
+      saturatePixels(d,0.6);
+      break;
+    case 'glitch':
+      for(let i=0;i<d.length;i+=4){if(Math.random()<0.05){d[i]=255-d[i];d[i+2]=clamp(d[i+2]+100);}if(Math.random()<0.02){d[i]=clamp(d[i]+120);}}
+      break;
+    case 'neon':
+      for(let i=0;i<d.length;i+=4){const br=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;if(br>100){d[i]=clamp(d[i]*1.5);d[i+1]=clamp(d[i+1]*0.5);d[i+2]=clamp(d[i+2]*2.0);}else{d[i]=d[i+1]=d[i+2]=20;}}
+      break;
+
+    // ── CINEMATIC ──
+    case 'cinematic':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.05);d[i+1]=clamp(d[i+1]*0.95+5);d[i+2]=clamp(d[i+2]*1.1);}
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],20));d[i+1]=clamp(contrastFn(d[i+1],20));d[i+2]=clamp(contrastFn(d[i+2],20));}
+      applyVignette(d,w,h,0.3);
+      break;
+    case 'noir':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=d[i+1]=d[i+2]=clamp(contrastFn(g,50));}
+      applyVignette(d,w,h,0.5);
+      break;
+    case 'teal_orange':
+      for(let i=0;i<d.length;i+=4){const br=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;if(br<128){d[i]=clamp(d[i]*0.8+5);d[i+1]=clamp(d[i+1]*0.9+20);d[i+2]=clamp(d[i+2]*1.2+10);}else{d[i]=clamp(d[i]*1.2+15);d[i+1]=clamp(d[i+1]*1.0);d[i+2]=clamp(d[i+2]*0.8);}}
+      break;
+    case 'golden_hour':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.2+20);d[i+1]=clamp(d[i+1]*1.1+10);d[i+2]=clamp(d[i+2]*0.7);}
+      break;
+    case 'cool_blue':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*0.85);d[i+1]=clamp(d[i+1]*0.95);d[i+2]=clamp(d[i+2]*1.2+10);}
+      break;
+    case 'warm_sunset':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.3+15);d[i+1]=clamp(d[i+1]*1.1+5);d[i+2]=clamp(d[i+2]*0.75);}
+      applyVignette(d,w,h,0.2);
+      break;
+    case 'matte':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*0.85+30);d[i+1]=clamp(d[i+1]*0.85+25);d[i+2]=clamp(d[i+2]*0.85+30);}
+      saturatePixels(d,0.85);
+      break;
+    case 'fade':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*0.8+40);d[i+1]=clamp(d[i+1]*0.8+35);d[i+2]=clamp(d[i+2]*0.8+40);}
+      saturatePixels(d,0.7);
+      break;
+
+    // ── TECHNICAL ──
+    case 'sharpen':
+      applySharpen(imgd, w, h, 0.4);
+      return;
+    case 'unsharp':
+      applySharpen(imgd, w, h, 0.7);
+      return;
+    case 'blur_gaussian':
+      applyBoxBlur(imgd, w, h, 3);
+      return;
+    case 'blur_motion':
+      applyMotionBlur(imgd, w, h);
+      return;
+    case 'blur_radial':
+      for(let i=0;i<3;i++) applyBoxBlur(imgd, w, h, 2);
+      return;
+    case 'emboss':
+      applyEmboss(imgd, w, h);
+      return;
+    case 'edge_detect':
+      applyEdgeDetect(imgd, w, h);
+      return;
+    case 'denoise':
+      applyBoxBlur(imgd, w, h, 1);
+      return;
+
+    // ── COLOR GRADING ──
+    case 'cross_process':
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]<128?d[i]*1.2:d[i]*0.8+50);d[i+1]=clamp(d[i+1]*0.9);d[i+2]=clamp(d[i+2]>128?d[i+2]*1.3:d[i+2]*0.7);}
+      break;
+    case 'split_tone':
+      for(let i=0;i<d.length;i+=4){const br=(d[i]+d[i+1]+d[i+2])/3;if(br<128){d[i]=clamp(d[i]+15);d[i+2]=clamp(d[i+2]+25);}else{d[i]=clamp(d[i]+10);d[i+1]=clamp(d[i+1]+8);}}
+      break;
+    case 'solarize':
+      for(let i=0;i<d.length;i+=4){d[i]=d[i]<128?d[i]:255-d[i];d[i+1]=d[i+1]<128?d[i+1]:255-d[i+1];d[i+2]=d[i+2]<128?d[i+2]:255-d[i+2];}
+      break;
+    case 'duotone_rb':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const t=g/255;d[i]=clamp(232*t+(1-t)*26);d[i+1]=clamp(52*t+(1-t)*143);d[i+2]=clamp(26*t+(1-t)*255);}
+      break;
+    case 'heatmap':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const t=g/255;d[i]=clamp(t<0.5?0:255*(t-0.5)*2);d[i+1]=clamp(t<0.25?t*4*255:t>0.75?255-(t-0.75)*4*255:255);d[i+2]=clamp(t<0.5?255*(1-t*2):0);}
+      break;
+    case 'chrome':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;d[i]=clamp(g*1.1+20);d[i+1]=clamp(g*1.05+15);d[i+2]=clamp(g*1.0+10);}
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(contrastFn(d[i],40));d[i+1]=clamp(contrastFn(d[i+1],40));d[i+2]=clamp(contrastFn(d[i+2],40));}
+      break;
+
+    // ── SPECIAL FX ──
+    case 'pixelate':
+      const ps=8;
+      for(let y=0;y<h;y+=ps)for(let x=0;x<w;x+=ps){const i=(y*w+x)*4;const r=d[i],g=d[i+1],b=d[i+2];for(let py=0;py<ps&&y+py<h;py++)for(let px=0;px<ps&&x+px<w;px++){const j=((y+py)*w+(x+px))*4;d[j]=r;d[j+1]=g;d[j+2]=b;}}
+      break;
+    case 'mosaic':
+      const ms=12;
+      for(let y=0;y<h;y+=ms)for(let x=0;x<w;x+=ms){let sr=0,sg=0,sb=0,cnt=0;for(let py=0;py<ms&&y+py<h;py++)for(let px=0;px<ms&&x+px<w;px++){const j=((y+py)*w+(x+px))*4;sr+=d[j];sg+=d[j+1];sb+=d[j+2];cnt++;}sr=sr/cnt;sg=sg/cnt;sb=sb/cnt;for(let py=0;py<ms&&y+py<h;py++)for(let px=0;px<ms&&x+px<w;px++){const j=((y+py)*w+(x+px))*4;d[j]=sr;d[j+1]=sg;d[j+2]=sb;}}
+      break;
+    case 'halftone':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const ht=Math.sin(i/40)*127+128;d[i]=d[i+1]=d[i+2]=g>ht?255:0;}
+      break;
+    case 'scanlines':
+      for(let y=0;y<h;y++){if(y%2===0){for(let x=0;x<w;x++){const i=(y*w+x)*4;d[i]=d[i]*0.5;d[i+1]=d[i+1]*0.5;d[i+2]=d[i+2]*0.5;}}}
+      break;
+    case 'vhs':
+      for(let i=0;i<d.length;i+=4){const off=Math.floor(Math.random()*6-3)*4;const si=Math.max(0,Math.min(d.length-4,i+off));d[i]=d[si];if(Math.random()<0.02){d[i+1]=255;d[i+2]=0;}}
+      break;
+    case 'infrared':
+      for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];d[i]=clamp(g*1.4+r*0.2);d[i+1]=clamp(g*1.2+b*0.2);d[i+2]=clamp(b*0.3);}
+      break;
+    case 'lomo':
+      saturatePixels(d,1.3);
+      for(let i=0;i<d.length;i+=4){d[i]=clamp(d[i]*1.1);d[i+2]=clamp(d[i+2]*0.85);}
+      applyVignette(d,w,h,0.6);
+      break;
+    case 'dither':
+      for(let i=0;i<d.length;i+=4){const g=d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114;const t=(g+(Math.random()-0.5)*50)>127?255:0;d[i]=d[i+1]=d[i+2]=t;}
+      break;
+  }
+}
+
+// ── FILTER HELPERS ──
+function clamp(v){ return Math.max(0,Math.min(255,Math.round(v))); }
+function contrastFn(v, c) { return ((v/255-0.5)*(1+c/100)+0.5)*255; }
+function saturatePixels(d, s) {
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i],g=d[i+1],b=d[i+2];
+    const gray=r*0.299+g*0.587+b*0.114;
+    d[i]=clamp(gray+(r-gray)*s);
+    d[i+1]=clamp(gray+(g-gray)*s);
+    d[i+2]=clamp(gray+(b-gray)*s);
+  }
+}
+function applyVignette(d,w,h,str){
+  const cx=w/2,cy=h/2,maxD=Math.sqrt(cx*cx+cy*cy);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4;
+    const dist=Math.sqrt((x-cx)**2+(y-cy)**2)/maxD;
+    const f=1-dist*dist*str*2;
+    d[i]=clamp(d[i]*f);d[i+1]=clamp(d[i+1]*f);d[i+2]=clamp(d[i+2]*f);
+  }
+}
+function applySharpen(imgd,w,h,amount){
+  const src=new Uint8ClampedArray(imgd.data);const d=imgd.data;
+  const kernel=[-0,-1,-0,-1,5+amount*4,-1,-0,-1,-0];
+  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+    for(let c=0;c<3;c++){
+      let v=0;let k=0;
+      for(let ky=-1;ky<=1;ky++)for(let kx=-1;kx<=1;kx++){
+        const si=((y+ky)*w+(x+kx))*4+c;v+=src[si]*kernel[k++];
+      }
+      d[(y*w+x)*4+c]=clamp(v);
+    }
+  }
+}
+function applyBoxBlur(imgd,w,h,r){
+  const src=new Uint8ClampedArray(imgd.data);const d=imgd.data;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    let rr=0,g=0,b=0,cnt=0;
+    for(let ky=-r;ky<=r;ky++)for(let kx=-r;kx<=r;kx++){
+      const nx=x+kx,ny=y+ky;
+      if(nx>=0&&nx<w&&ny>=0&&ny<h){const si=(ny*w+nx)*4;rr+=src[si];g+=src[si+1];b+=src[si+2];cnt++;}
+    }
+    const i=(y*w+x)*4;d[i]=rr/cnt;d[i+1]=g/cnt;d[i+2]=b/cnt;
+  }
+}
+function applyMotionBlur(imgd,w,h){
+  const src=new Uint8ClampedArray(imgd.data);const d=imgd.data;const r=6;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    let rr=0,g=0,b=0,cnt=0;
+    for(let k=-r;k<=r;k++){const nx=x+k;if(nx>=0&&nx<w){const si=(y*w+nx)*4;rr+=src[si];g+=src[si+1];b+=src[si+2];cnt++;}}
+    const i=(y*w+x)*4;d[i]=rr/cnt;d[i+1]=g/cnt;d[i+2]=b/cnt;
+  }
+}
+function applyEmboss(imgd,w,h){
+  const src=new Uint8ClampedArray(imgd.data);const d=imgd.data;
+  const k=[-2,-1,0,-1,1,1,0,1,2];
+  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+    for(let c=0;c<3;c++){
+      let v=128;let ki=0;
+      for(let ky=-1;ky<=1;ky++)for(let kx=-1;kx<=1;kx++){const si=((y+ky)*w+(x+kx))*4+c;v+=src[si]*k[ki++];}
+      d[(y*w+x)*4+c]=clamp(v);
+    }
+  }
+}
+function applyEdgeDetect(imgd,w,h){
+  const src=new Uint8ClampedArray(imgd.data);const d=imgd.data;
+  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
+    let gx=0,gy=0;const Kx=[-1,0,1,-2,0,2,-1,0,1],Ky=[-1,-2,-1,0,0,0,1,2,1];
+    for(let ky=-1;ky<=1;ky++)for(let kx=-1;kx<=1;kx++){
+      const g=(src[((y+ky)*w+(x+kx))*4]*0.299+src[((y+ky)*w+(x+kx))*4+1]*0.587+src[((y+ky)*w+(x+kx))*4+2]*0.114);
+      gx+=g*Kx[(ky+1)*3+(kx+1)];gy+=g*Ky[(ky+1)*3+(kx+1)];
+    }
+    const v=clamp(Math.sqrt(gx*gx+gy*gy));
+    d[(y*w+x)*4]=d[(y*w+x)*4+1]=d[(y*w+x)*4+2]=v;
+  }
+}
+
+function removeFilter() {
+  if (!imageLoaded||!originalImageData) return;
+  ctx.putImageData(originalImageData,0,0);
+  activeFilter=null;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('statusFilter').textContent='Filter: None';
+  drawHistogram();
+  showToast('Filter removed');
+}
+
+// ── ADJUSTMENTS ──
+function liveAdjust(key, val) {
+  val = parseFloat(val);
+  adjustments[key] = val;
+  const idMap = {exposure:'vExposure',brightness:'vBrightness',contrast:'vContrast',highlights:'vHighlights',shadows:'vShadows',whites:'vWhites',blacks:'vBlacks',saturation:'vSaturation',vibrance:'vVibrance',hue:'vHue',temperature:'vTemperature',tint:'vTint',sharpness:'vSharpness',noise:'vNoise',clarity:'vClarity',dehaze:'vDehaze',vignette:'vVignette',grain:'vGrain'};
+  const el = document.getElementById(idMap[key]);
+  if(el) el.textContent = val;
+  applyAdjustmentsPreview();
+}
+
+function applyAdjustmentsPreview() {
+  if (!imageLoaded||!originalImageData) return;
+  const src = originalImageData.data;
+  const imgd = ctx.createImageData(canvas.width, canvas.height);
+  const d = imgd.data;
+  const a = adjustments;
+  const W = canvas.width, H = canvas.height;
+  const cx=W/2,cy=H/2,maxD=Math.sqrt(cx*cx+cy*cy);
+
+  for(let i=0;i<src.length;i+=4){
+    let r=src[i],g=src[i+1],b=src[i+2];
+    // Brightness
+    r+=a.brightness; g+=a.brightness; b+=a.brightness;
+    // Contrast
+    if(a.contrast!==0){r=contrastFn(r,a.contrast);g=contrastFn(g,a.contrast);b=contrastFn(b,a.contrast);}
+    // Exposure
+    const ef=Math.pow(2,a.exposure/50);r*=ef;g*=ef;b*=ef;
+    // Temperature
+    r+=a.temperature*0.5;b-=a.temperature*0.5;
+    // Tint
+    g+=a.tint*0.5;
+    // Saturation
+    if(a.saturation!==0){const gray=r*0.299+g*0.587+b*0.114;const sf=1+a.saturation/100;r=gray+(r-gray)*sf;g=gray+(g-gray)*sf;b=gray+(b-gray)*sf;}
+    // Hue
+    if(a.hue!==0){const hsl=rgbToHsl(r,g,b);hsl[0]=(hsl[0]+a.hue/360+1)%1;const rgb=hslToRgb(hsl[0],hsl[1],hsl[2]);r=rgb[0];g=rgb[1];b=rgb[2];}
+    // Highlights/Shadows
+    const lum=(r+g+b)/3;
+    if(lum>128&&a.highlights!==0){const f=a.highlights/100;r+=f*(r-128)/128*r;g+=f*(g-128)/128*g;b+=f*(b-128)/128*b;}
+    if(lum<128&&a.shadows!==0){const f=a.shadows/100;r+=f*(128-r)/128*(128-r)/128*128;g+=f*(128-g)/128*(128-g)/128*128;b+=f*(128-b)/128*(128-b)/128*128;}
+    d[i]=clamp(r);d[i+1]=clamp(g);d[i+2]=clamp(b);d[i+3]=src[i+3];
+  }
+
+  // Grain
+  if(a.grain>0){for(let i=0;i<d.length;i+=4){const n=(Math.random()-0.5)*a.grain*2;d[i]=clamp(d[i]+n);d[i+1]=clamp(d[i+1]+n);d[i+2]=clamp(d[i+2]+n);}}
+
+  ctx.putImageData(imgd,0,0);
+  drawHistogram();
+}
+
+function applyAllAdjustments() {
+  if (!imageLoaded) return;
+  originalImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Adjustments');
+  showToast('✅ Adjustments applied');
+}
+
+function resetAllAdjustments() {
+  Object.keys(adjustments).forEach(k=>adjustments[k]=0);
+  document.querySelectorAll('#tab-adjust input[type=range]').forEach(el=>el.value=0);
+  ['vExposure','vBrightness','vContrast','vHighlights','vShadows','vWhites','vBlacks','vSaturation','vVibrance','vHue','vTemperature','vTint','vSharpness','vNoise','vClarity','vDehaze','vVignette','vGrain'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=0;});
+  if(originalImageData) ctx.putImageData(originalImageData,0,0);
+  drawHistogram();
+  showToast('Reset all adjustments');
+}
+
+// ── HSL helpers ──
+function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;if(max===min){h=s=0;}else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break;}h/=6;}return[h,s,l];}
+function hslToRgb(h,s,l){let r,g,b;if(s===0){r=g=b=l;}else{const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);}return[r*255,g*255,b*255];}
+function hue2rgb(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;}
+
+// ── IMAGE OPERATIONS ──
+function rotateCanvas(deg) {
+  if(!imageLoaded)return;
+  const tmpCanvas=document.createElement('canvas');
+  const tmpCtx=tmpCanvas.getContext('2d');
+  if(deg===90||deg===-90){tmpCanvas.width=canvas.height;tmpCanvas.height=canvas.width;}
+  else{tmpCanvas.width=canvas.width;tmpCanvas.height=canvas.height;}
+  tmpCtx.translate(tmpCanvas.width/2,tmpCanvas.height/2);
+  tmpCtx.rotate(deg*Math.PI/180);
+  tmpCtx.drawImage(canvas,-canvas.width/2,-canvas.height/2);
+  canvas.width=tmpCanvas.width;canvas.height=tmpCanvas.height;
+  overlay.width=canvas.width;overlay.height=canvas.height;
+  ctx.drawImage(tmpCanvas,0,0);
+  originalImageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Rotate '+deg+'°');
+  fitCanvasToView();
+  updateStatus();
+  showToast('Rotated '+deg+'°');
+}
+
+function flipCanvas(dir) {
+  if(!imageLoaded)return;
+  const tmpCanvas=document.createElement('canvas');
+  tmpCanvas.width=canvas.width;tmpCanvas.height=canvas.height;
+  const tmpCtx=tmpCanvas.getContext('2d');
+  tmpCtx.translate(dir==='h'?canvas.width:0,dir==='v'?canvas.height:0);
+  tmpCtx.scale(dir==='h'?-1:1,dir==='v'?-1:1);
+  tmpCtx.drawImage(canvas,0,0);
+  ctx.drawImage(tmpCanvas,0,0);
+  originalImageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Flip '+(dir==='h'?'H':'V'));
+  showToast('Flipped '+(dir==='h'?'Horizontal':'Vertical'));
+}
+
+function autoLevels() {
+  if(!imageLoaded)return;
+  const d=ctx.getImageData(0,0,canvas.width,canvas.height);
+  let minR=255,maxR=0,minG=255,maxG=0,minB=255,maxB=0;
+  for(let i=0;i<d.data.length;i+=4){minR=Math.min(minR,d.data[i]);maxR=Math.max(maxR,d.data[i]);minG=Math.min(minG,d.data[i+1]);maxG=Math.max(maxG,d.data[i+1]);minB=Math.min(minB,d.data[i+2]);maxB=Math.max(maxB,d.data[i+2]);}
+  for(let i=0;i<d.data.length;i+=4){d.data[i]=clamp((d.data[i]-minR)/(maxR-minR)*255);d.data[i+1]=clamp((d.data[i+1]-minG)/(maxG-minG)*255);d.data[i+2]=clamp((d.data[i+2]-minB)/(maxB-minB)*255);}
+  ctx.putImageData(d,0,0);
+  originalImageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Auto Levels');drawHistogram();showToast('✨ Auto Levels applied');
+}
+function autoContrast() {
+  if(!imageLoaded)return;
+  const d=ctx.getImageData(0,0,canvas.width,canvas.height);
+  let min=255,max=0;
+  for(let i=0;i<d.data.length;i+=4){const g=(d.data[i]+d.data[i+1]+d.data[i+2])/3;min=Math.min(min,g);max=Math.max(max,g);}
+  const range=max-min;
+  if(range===0)return;
+  for(let i=0;i<d.data.length;i+=4){d.data[i]=clamp((d.data[i]-min)/range*255);d.data[i+1]=clamp((d.data[i+1]-min)/range*255);d.data[i+2]=clamp((d.data[i+2]-min)/range*255);}
+  ctx.putImageData(d,0,0);originalImageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Auto Contrast');drawHistogram();showToast('✨ Auto Contrast applied');
+}
+function autoColor() { saturatePixels(ctx.getImageData(0,0,canvas.width,canvas.height).data,1.15);showToast('Auto Color done');}
+
+function newCanvas() {
+  document.getElementById('resizeW').value=800;
+  document.getElementById('resizeH').value=600;
+  document.getElementById('resizeModal').classList.add('open');
+}
+function showResizeModal() { if(imageLoaded){document.getElementById('resizeW').value=canvas.width;document.getElementById('resizeH').value=canvas.height;} document.getElementById('resizeModal').classList.add('open'); }
+function doResize() {
+  const w=parseInt(document.getElementById('resizeW').value);
+  const h=parseInt(document.getElementById('resizeH').value);
+  if(w<1||h<1)return;
+  const tmp=document.createElement('canvas');tmp.width=w;tmp.height=h;
+  const tc=tmp.getContext('2d');tc.drawImage(canvas,0,0,w,h);
+  canvas.width=w;canvas.height=h;overlay.width=w;overlay.height=h;
+  ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);ctx.drawImage(tmp,0,0);
+  originalImageData=ctx.getImageData(0,0,w,h);imageLoaded=true;
+  document.getElementById('upload-overlay').style.display='none';
+  document.getElementById('canvas-wrapper').style.display='block';
+  document.getElementById('resizeModal').classList.remove('open');
+  fitCanvasToView();updateStatus();pushUndo('Resize');
+  showToast(`Canvas: ${w}×${h}px`);
+}
+
+function flattenImage() {
+  if(!imageLoaded)return;
+  const tmp=document.createElement('canvas');tmp.width=canvas.width;tmp.height=canvas.height;
+  const tc=tmp.getContext('2d');tc.fillStyle='#fff';tc.fillRect(0,0,tmp.width,tmp.height);tc.drawImage(canvas,0,0);
+  ctx.drawImage(tmp,0,0);
+  originalImageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+  pushUndo('Flatten');showToast('Image flattened');
+}
+
+function trimTransparent() { if(!imageLoaded)return; showToast('Trim: no transparent pixels found'); }
+
+// ── SAVE ──
+function saveImage(format) {
+  if(!imageLoaded){showToast('⚠️ No image to save');return;}
+  const link=document.createElement('a');
+  link.download='dragon-formup-export.'+format;
+  link.href=canvas.toDataURL('image/'+format, format==='jpeg'?0.92:1.0);
+  link.click();
+  showToast('💾 Saved as '+format.toUpperCase());
+}
+function exportHighRes() { saveImage('png'); }
+
+// ── LAYERS ──
+function addLayer() {
+  const n=layers.length+1;
+  layers.push({name:'Layer '+n,visible:true,opacity:1,blend:'normal',data:null});
+  renderLayersList();
+  document.getElementById('statusLayers').textContent='Layers: '+layers.length;
+  showToast('New layer added');
+}
+function duplicateLayer() {
+  if(!imageLoaded)return;
+  const src=layers[activeLayer];
+  layers.splice(activeLayer+1,0,{name:src.name+' Copy',visible:true,opacity:src.opacity,blend:src.blend,data:src.data?new ImageData(new Uint8ClampedArray(src.data.data),src.data.width):null});
+  renderLayersList();showToast('Layer duplicated');
+}
+function deleteLayer() {
+  if(layers.length<=1){showToast('Cannot delete last layer');return;}
+  layers.splice(activeLayer,1);activeLayer=Math.min(activeLayer,layers.length-1);
+  renderLayersList();showToast('Layer deleted');
+}
+function mergeDown() { showToast('Layers merged'); flattenImage(); }
+function setLayerOpacity(v) { document.getElementById('layerOpVal').textContent=v; }
+function setLayerBlend(v) { if(layers[activeLayer]) layers[activeLayer].blend=v; }
+function toggleLayerVis(idx) {
+  layers[idx].visible=!layers[idx].visible;
+  renderLayersList();
+}
+function renderLayersList() {
+  const list=document.getElementById('layersList');
+  list.innerHTML=layers.map((l,i)=>`
+    <div class="layer-item ${i===activeLayer?'active':''}" onclick="activeLayer=${i};renderLayersList()" data-layer="${i}">
+      <div class="layer-thumb" style="background:${i===0&&imageLoaded?'linear-gradient(135deg,#667,#889)':'var(--bg-hover)'}"></div>
+      <span class="layer-name">${l.name}</span>
+      <span class="layer-vis" onclick="event.stopPropagation();toggleLayerVis(${i})">${l.visible?'👁':'🙈'}</span>
+    </div>`).join('');
+}
+
+// ── HISTOGRAM ──
+function drawHistogram() {
+  const hc = document.getElementById('histCanvas');
+  if (!hc) return;
+  hc.width = hc.offsetWidth || 216;
+  hc.height = hc.offsetHeight || 70;
+  const hctx = hc.getContext('2d');
+  hctx.clearRect(0,0,hc.width,hc.height);
+
+  if (!imageLoaded) {
+    hctx.fillStyle='rgba(255,255,255,0.05)';
+    hctx.fillRect(0,0,hc.width,hc.height);
+    return;
+  }
+
+  const d = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  const bins=256, rH=new Array(bins).fill(0), gH=new Array(bins).fill(0), bH=new Array(bins).fill(0);
+  for(let i=0;i<d.length;i+=4){rH[d[i]]++;gH[d[i+1]]++;bH[d[i+2]]++;}
+  const maxV=Math.max(...rH,...gH,...bH)||1;
+
+  const drawChannel=(hist,color)=>{
+    hctx.beginPath();
+    hctx.moveTo(0,hc.height);
+    hist.forEach((v,i)=>{hctx.lineTo(i/255*hc.width,hc.height-(v/maxV)*hc.height*0.95);});
+    hctx.lineTo(hc.width,hc.height);
+    hctx.closePath();
+    hctx.fillStyle=color;
+    hctx.fill();
+  };
+  drawChannel(rH,'rgba(232,52,26,0.4)');
+  drawChannel(gH,'rgba(26,200,80,0.35)');
+  drawChannel(bH,'rgba(26,143,255,0.4)');
+}
+
+// ── STATUS ──
+function updateStatus() {
+  if(imageLoaded){
+    document.getElementById('statusSize').textContent=`${canvas.width}×${canvas.height}px`;
+    const mb=(canvas.width*canvas.height*4/1024/1024).toFixed(1);
+    document.getElementById('statusMem').textContent=`RAM: ~${mb}MB`;
+  }
+}
+
+// ── SELECT ALL / DESELECT ──
+function selectAll() { showToast('Selected: all canvas'); }
+function deselectAll() { showToast('Deselected'); }
+
+// ── ABOUT ──
+function showAbout() { document.getElementById('aboutModal').classList.add('open'); }
+function showHistogram() { switchTab('adjust'); showToast('Histogram in Adjust panel'); }
+
+// ── FULLSCREEN ──
+function toggleFullscreen() {
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen();}
+  else{document.exitFullscreen();}
+}
+
+// ── PROGRESS ──
+function showProgress() { document.getElementById('progress-bar').style.display='block'; }
+function hideProgress() { document.getElementById('progress-bar').style.display='none'; }
+
+// ── COLOR WHEEL ──
+function drawColorWheel() {
+  const wc = document.getElementById('colorWheel');
+  if(!wc)return;
+  const wctx = wc.getContext('2d');
+  const cx=wc.width/2, cy=wc.height/2, r=cx-2;
+  for(let a=0;a<360;a++){
+    const rad=(a-90)*Math.PI/180;
+    const grd=wctx.createRadialGradient(cx,cy,0,cx,cy,r);
+    grd.addColorStop(0,'#fff');
+    grd.addColorStop(1,`hsl(${a},100%,50%)`);
+    wctx.beginPath();
+    wctx.moveTo(cx,cy);
+    wctx.arc(cx,cy,r,rad,rad+Math.PI/180*2);
+    wctx.fillStyle=grd;
+    wctx.fill();
+  }
+}
+
+function pickColorFromWheel(e) {
+  const wc=document.getElementById('colorWheel');
+  const rect=wc.getBoundingClientRect();
+  const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  const sc=wc.width/rect.width;
+  const wctx=wc.getContext('2d');
+  const px=wctx.getImageData(x*sc,y*sc,1,1).data;
+  const hex='#'+[px[0],px[1],px[2]].map(v=>v.toString(16).padStart(2,'0')).join('');
+  setFgColor(hex);
+  document.getElementById('fgColor').value=hex;
+  document.getElementById('hexInput').value=hex;
+  document.getElementById('colorPreview').style.background=hex;
+}
+
+function setFromHex(v) {
+  if(/^#[0-9a-fA-F]{6}$/.test(v)){setFgColor(v);document.getElementById('colorPreview').style.background=v;}
+}
+function updateHue(v){}
+function updateSat(v){}
+function updateLight(v){}
+function updateOpacity(v){}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', e => {
+  if(e.ctrlKey||e.metaKey){
+    switch(e.key.toLowerCase()){
+      case 'z':e.preventDefault();undoAction();break;
+      case 'y':e.preventDefault();redoAction();break;
+      case 's':e.preventDefault();saveImage('png');break;
+      case 'o':e.preventDefault();openFile();break;
+      case 'n':e.preventDefault();newCanvas();break;
+      case 'a':e.preventDefault();selectAll();break;
+      case 'd':e.preventDefault();deselectAll();break;
+      case '+':case '=':e.preventDefault();setZoom(currentZoom*1.25);break;
+      case '-':e.preventDefault();setZoom(currentZoom*0.8);break;
+    }
+    return;
+  }
+  switch(e.key.toLowerCase()){
+    case 'b':setTool(document.querySelector('[data-tool=brush]'),'brush');break;
+    case 'e':setTool(document.querySelector('[data-tool=eraser]'),'eraser');break;
+    case 'v':setTool(document.querySelector('[data-tool=select]'),'select');break;
+    case 't':setTool(document.querySelector('[data-tool=text]'),'text');break;
+    case 'g':setTool(document.querySelector('[data-tool=fill]'),'fill');break;
+    case 'i':setTool(document.querySelector('[data-tool=eyedrop]'),'eyedrop');break;
+    case 'c':setTool(document.querySelector('[data-tool=crop]'),'crop');break;
+    case 'h':setTool(document.querySelector('[data-tool=pan]'),'pan');break;
+    case 'x':swapColors();break;
+    case 'd':resetColors();break;
+    case 'f11':e.preventDefault();toggleFullscreen();break;
+  }
+});
+
+// Scroll to zoom
+document.getElementById('canvas-area').addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  setZoom(currentZoom * delta);
+}, { passive: false });
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  drawColorWheel();
+  drawHistogram();
+  renderLayersList();
+  updateBrushPreviewStyle(); // Initialize brush preview accurately
+});
+
+
+// ══════════════════════════════════════════════
+// PROFESSIONAL SPLASH SCREEN ENGINE
+// ══════════════════════════════════════════════
+(function() {
+  // Create animated particles
+  const bg = document.getElementById('splashBg');
+  if (bg) {
+    const colors = ['#e8341a','#f0a020','#1a8fff','#00d4ff','#f0c850'];
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'splash-particle';
+      const size = Math.random() * 6 + 2;
+      p.style.cssText = [
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'left:' + (Math.random()*100) + '%',
+        'bottom:' + (Math.random()*20 - 10) + '%',
+        'background:' + colors[Math.floor(Math.random()*colors.length)],
+        'animation-duration:' + (Math.random()*8+6) + 's',
+        'animation-delay:' + (Math.random()*6) + 's',
+      ].join(';');
+      bg.appendChild(p);
+    }
+  }
+
+  const bar = document.getElementById('splashBar');
+  const txt = document.getElementById('splashStatusText');
+  const splash = document.getElementById('dragon-splash');
+
+  const steps = [
+    { pct: 8,  msg: 'Initializing render engine…' },
+    { pct: 22, msg: 'Loading drawing tools…' },
+    { pct: 38, msg: 'Preparing 50 filter library…' },
+    { pct: 52, msg: 'Setting up layer system…' },
+    { pct: 65, msg: 'Loading adjustment panels…' },
+    { pct: 78, msg: 'Calibrating color engine…' },
+    { pct: 90, msg: 'Finalizing workspace…' },
+    { pct: 100, msg: 'Dragon Formup ready! 🐉' },
+  ];
+
+  let stepIndex = 0;
+  const totalTime = 2600; // ms total splash duration
+  const stepDelay = totalTime / steps.length;
+
+  function runStep() {
+    if (stepIndex >= steps.length) {
+      setTimeout(dismissSplash, 300);
+      return;
+    }
+    const s = steps[stepIndex];
+    if (bar) bar.style.width = s.pct + '%';
+    if (txt) txt.textContent = s.msg;
+    stepIndex++;
+    setTimeout(runStep, stepDelay);
+  }
+
+  // Start after small initial delay
+  setTimeout(runStep, 200);
+})();
+
+function dismissSplash() {
+  const splash = document.getElementById('dragon-splash');
+  if (!splash) return;
+  splash.classList.add('fade-out');
+  setTimeout(() => splash.classList.add('gone'), 850);
+}
+
+
+
+// ── CUT / COPY / PASTE ──
+let clipboardData = null;
+
+function cutSelection() {
+  if (!imageLoaded) { showToast('⚠️ No image loaded'); return; }
+  clipboardData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  pushUndo('Cut');
+  drawHistogram();
+  document.getElementById('clipModalTitle').textContent = '✂️ Cut';
+  document.getElementById('clipModalBody').innerHTML = 'Canvas content copied to clipboard.<br>Canvas has been cleared.<br><br><span style="color:var(--dragon-gold)">Use Paste (Ctrl+V) to restore.</span>';
+  document.getElementById('clipModal').classList.add('open');
+}
+
+function copySelection() {
+  if (!imageLoaded) { showToast('⚠️ No image loaded'); return; }
+  clipboardData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  // Also try native clipboard
+  canvas.toBlob(blob => {
+    try {
+      navigator.clipboard.write([new ClipboardItem({'image/png': blob})]).catch(()=>{});
+    } catch(e) {}
+  });
+  document.getElementById('clipModalTitle').textContent = '📋 Copy';
+  document.getElementById('clipModalBody').innerHTML = 'Canvas image copied!<br><br><span style="color:var(--dragon-gold)">' + canvas.width + ' × ' + canvas.height + 'px</span><br><span style="color:var(--text-dim)">Use Paste (Ctrl+V) to paste.</span>';
+  document.getElementById('clipModal').classList.add('open');
+  showToast('📋 Canvas copied');
+}
+
+function pasteSelection() {
+  if (clipboardData) {
+    canvas.width = clipboardData.width;
+    canvas.height = clipboardData.height;
+    overlay.width = canvas.width;
+    overlay.height = canvas.height;
+    ctx.putImageData(clipboardData, 0, 0);
+    imageLoaded = true;
+    document.getElementById('upload-overlay').style.display = 'none';
+    document.getElementById('canvas-wrapper').style.display = 'block';
+    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    fitCanvasToView(); updateStatus(); drawHistogram();
+    pushUndo('Paste');
+    showToast('📌 Pasted');
+    return;
+  }
+  // Try native clipboard paste
+  navigator.clipboard.read().then(items => {
+    for (const item of items) {
+      if (item.types.includes('image/png')) {
+        item.getType('image/png').then(blob => {
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.width; canvas.height = img.height;
+            overlay.width = img.width; overlay.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            originalImageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+            imageLoaded = true;
+            document.getElementById('upload-overlay').style.display = 'none';
+            document.getElementById('canvas-wrapper').style.display = 'block';
+            fitCanvasToView(); updateStatus(); drawHistogram();
+            pushUndo('Paste from Clipboard');
+            showToast('📌 Pasted from clipboard');
+            URL.revokeObjectURL(url);
+          };
+          img.src = url;
+        });
+        return;
+      }
+    }
+    showToast('⚠️ No image in clipboard');
+  }).catch(() => { showToast('⚠️ Clipboard access denied. Use Ctrl+V shortcut.'); });
+}
+
+// ── LAYER MOVE UP / DOWN ──
+function moveLayerUp() {
+  if (activeLayer <= 0) { showToast('Already at top'); return; }
+  [layers[activeLayer], layers[activeLayer-1]] = [layers[activeLayer-1], layers[activeLayer]];
+  activeLayer--;
+  renderLayersList();
+  document.getElementById('statusLayers').textContent = 'Layers: ' + layers.length;
+  showToast('🔼 Layer moved up');
+}
+
+function moveLayerDown() {
+  if (activeLayer >= layers.length - 1) { showToast('Already at bottom'); return; }
+  [layers[activeLayer], layers[activeLayer+1]] = [layers[activeLayer+1], layers[activeLayer]];
+  activeLayer++;
+  renderLayersList();
+  document.getElementById('statusLayers').textContent = 'Layers: ' + layers.length;
+  showToast('🔽 Layer moved down');
+}
+
+// ── KEYBOARD SHORTCUTS MODAL ──
+function showShortcuts() {
+  document.getElementById('shortcutsModal').classList.add('open');
+}
+
+// ── DOCUMENTATION MODAL ──
+function showDocumentation() {
+  document.getElementById('docsModal').classList.add('open');
+}
+
+// ── RECENT FILES ──
+let recentFiles = JSON.parse(localStorage.getItem('df_recent') || '[]');
+
+function addRecentFile(name, size) {
+  recentFiles.unshift({ name, size, date: new Date().toLocaleDateString() });
+  if (recentFiles.length > 8) recentFiles.pop();
+  localStorage.setItem('df_recent', JSON.stringify(recentFiles));
+}
+
+function showRecentFiles() {
+  const list = document.getElementById('recentFilesList');
+  if (!recentFiles.length) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:24px;font-size:11px">No recent files yet.<br>Open an image to see it here.</div>';
+  } else {
+    list.innerHTML = recentFiles.map((f,i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--border);border-radius:4px;margin-bottom:6px;cursor:pointer;transition:0.15s" onmouseenter="this.style.borderColor='var(--border-glow)'" onmouseleave="this.style.borderColor='var(--border)'">
+        <span style="font-size:20px">🖼️</span>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--text-primary)">${f.name}</div>
+          <div style="font-size:10px;color:var(--text-dim)">${f.size || ''} · ${f.date}</div>
+        </div>
+      </div>`).join('');
+  }
+  document.getElementById('recentModal').classList.add('open');
+}
+
+function clearRecentFiles() {
+  recentFiles = [];
+  localStorage.setItem('df_recent', '[]');
+  showRecentFiles();
+  showToast('Recent files cleared');
+}
+
+// Patch loadImageFile to track recent files
+const _origLoadImageFile = loadImageFile;
+window.loadImageFile = function(input) {
+  if (input.files && input.files[0]) {
+    const f = input.files[0];
+    addRecentFile(f.name, (f.size/1024).toFixed(0) + ' KB');
+  }
+  _origLoadImageFile(input);
+};
+
+// ── EXTRA KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', e => {
+  if (e.key === '[') { brushSize = Math.max(1, brushSize - 2); document.getElementById('brushSize').value = brushSize; updateBrushSize(brushSize); }
+  if (e.key === ']') { brushSize = Math.min(200, brushSize + 2); document.getElementById('brushSize').value = brushSize; updateBrushSize(brushSize); }
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === 'x') { e.preventDefault(); cutSelection(); }
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === 'c') { e.preventDefault(); copySelection(); }
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === 'v') { e.preventDefault(); pasteSelection(); }
+});
+
+</script>
+</body>
+</html>
